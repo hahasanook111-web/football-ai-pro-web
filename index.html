@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#071426">
-<title>FOOTBALL AI PRO PRO 3</title>
+<title>FOOTBALL AI PRO PRO 4</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#071426;color:#fff;font-family:Arial,sans-serif}
@@ -47,6 +47,15 @@ button:disabled{opacity:.6;cursor:wait}
 .score-pick{font-size:25px;font-weight:bold;color:#55f2bd;text-align:center;padding:8px}
 .risk-low{border-left:4px solid #10b981}.risk-medium{border-left:4px solid #f59e0b}.risk-high{border-left:4px solid #ef4444}.risk-score{font-size:25px;font-weight:bold;margin:5px 0}.risk-factor{margin:5px 0;color:#d6e9f5}.data-source{border-left:3px solid #10b981;padding-left:10px;margin:9px 0}
 .system-source{border-left:3px solid #60a5fa;padding-left:10px;margin:9px 0}
+.odds-inputs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}
+.odds-field{background:#10243b;border:1px solid #29445d;border-radius:9px;padding:9px;min-width:0}
+.odds-field label{display:block;color:#a8c5d9;font-size:12px;margin-bottom:5px}
+.odds-field input{width:100%;min-width:0;padding:9px;margin:0;font-size:14px}
+.odds-calc{width:100%;margin:5px 0;background:#087c70;color:white}
+.odds-result{margin-top:10px}
+.odds-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:7px 0;border-bottom:1px solid #29445d;font-size:12px}
+.odds-row strong{color:#55f2bd}
+@media(max-width:420px){.odds-inputs{grid-template-columns:1fr}.odds-row{font-size:11px}}
 .empty{text-align:center;color:#b7ccdc;padding:28px 10px}
 footer{text-align:center;color:#7894aa;font-size:12px;padding:20px}
 @media(max-width:520px){main{padding:10px}.pro-grid{grid-template-columns:1fr}.percent strong{font-size:16px}.bar-row{grid-template-columns:68px 1fr 38px}}
@@ -55,7 +64,7 @@ footer{text-align:center;color:#7894aa;font-size:12px;padding:20px}
 <body>
 <header>
 <h1>⚽ FOOTBALL AI PRO</h1>
-<p>ระบบติดตามและวิเคราะห์ฟุตบอล · PRO 3</p>
+<p>ระบบติดตามและวิเคราะห์ฟุตบอล · PRO 4</p>
 </header>
 <main>
 <div class="panel">
@@ -72,7 +81,7 @@ footer{text-align:center;color:#7894aa;font-size:12px;padding:20px}
 </div>
 <div id="matches"></div>
 </main>
-<footer>FOOTBALL AI PRO PRO 3 · บทวิเคราะห์เพื่อประกอบการติดตามกีฬา ไม่รับประกันผลการแข่งขัน</footer>
+<footer>FOOTBALL AI PRO PRO 4 · บทวิเคราะห์เพื่อประกอบการติดตามกีฬา ไม่รับประกันผลการแข่งขัน</footer>
 <script>
 const API="https://football-ai-pro-backend.onrender.com";
 const dateInput=document.getElementById("matchDate");
@@ -232,6 +241,19 @@ function showPrediction(box,result){
  html+=`<div class="pro-title">🛡️ ประเมินความเสี่ยงและความไม่แน่นอน PRO 3</div>`;
  const risk=riskAssessment({hs,as,hasPercent,pHome,pDraw,pAway,attackHome,attackAway,defenseHome,defenseAway,formHome,formAway,canEstimate});
  html+=`<div class="pro-card ${risk.css}"><strong>ระดับความเสี่ยงด้านข้อมูล: ${risk.level}</strong><div class="risk-score">${risk.score}/100</div><div>คะแนนนี้เป็นดัชนีข้อจำกัดของข้อมูลและความสูสีของผลคาดการณ์ ไม่ใช่โอกาสแพ้ชนะหรือความเสี่ยงการเดิมพัน</div><div class="prediction-note"><b>เหตุผลประกอบ</b></div>${risk.factors.length?risk.factors.map(x=>`<div class="risk-factor">• ${safe(x)}</div>`).join(""):`<div class="risk-factor">• ไม่พบข้อจำกัดหลักตามเกณฑ์ที่ระบบตรวจสอบ</div>`}<div class="prediction-note"><b>แนวทางอ่านผล:</b> ${safe(risk.advice)}</div></div>`;
+ html+=`<div class="pro-title">💹 เปรียบเทียบราคาบอล PRO 4</div>
+ <div class="pro-card odds-tool" data-api-home="${pHome===null?"":pHome}" data-api-draw="${pDraw===null?"":pDraw}" data-api-away="${pAway===null?"":pAway}">
+  <div>กรอกราคา decimal odds จากแหล่งที่คุณตรวจสอบเอง เพื่อเปรียบเทียบกับเปอร์เซ็นต์คาดการณ์จาก API</div>
+  <div class="odds-inputs">
+   <div class="odds-field"><label>เจ้าบ้านชนะ</label><input type="number" inputmode="decimal" min="1.01" step="0.01" placeholder="เช่น 2.10" data-odds="home"></div>
+   <div class="odds-field"><label>เสมอ</label><input type="number" inputmode="decimal" min="1.01" step="0.01" placeholder="เช่น 3.20" data-odds="draw"></div>
+   <div class="odds-field"><label>ทีมเยือนชนะ</label><input type="number" inputmode="decimal" min="1.01" step="0.01" placeholder="เช่น 3.50" data-odds="away"></div>
+  </div>
+  <button type="button" class="odds-calc" data-calc-odds>คำนวณและเปรียบเทียบราคา</button>
+  <div class="odds-result prediction-note" aria-live="polite">กรอกราคาให้ครบทั้ง 3 ช่อง แล้วกดคำนวณ ระบบจะหาความน่าจะเป็นโดยนัยและส่วนต่างจาก API</div>
+  <div class="prediction-note">สูตร: ความน่าจะเป็นโดยนัย = 1 ÷ ราคา decimal · ส่วนต่างราคาตลาดคำนวณจากผลรวมความน่าจะเป็นทั้งสามผลลัพธ์ ลบ 100%</div>
+  <div class="prediction-note warn">หากไม่มีราคาอ้างอิง อย่ากรอกตัวเลขคาดเดา ระบบไม่ได้ดึงราคาเจ้ามืออัตโนมัติ และผลต่างไม่ใช่คำแนะนำการเดิมพัน</div>
+ </div>`;
  html+=`<div class="pro-title">🧭 ระดับความชัดเจนของข้อมูล</div>`;
  const sample=Math.min(hs.played,5)+Math.min(as.played,5);
  let clarity=sample>=8?"ค่อนข้างดี":sample>=5?"ปานกลาง":"จำกัด";
@@ -260,7 +282,31 @@ async function loadPrediction(id,button,box){
   box.innerHTML=`<b>⚠️ โหลดข้อมูลวิเคราะห์ไม่สำเร็จ</b><br>${safe(error.message)}<br><br>ลองกดปุ่มวิเคราะห์อีกครั้งภายหลัง`;
  }finally{button.disabled=false;button.textContent="🤖 วิเคราะห์การแข่งขัน PRO";}
 }
+function calculateOdds(tool){
+ const fields={home:tool.querySelector('[data-odds="home"]'),draw:tool.querySelector('[data-odds="draw"]'),away:tool.querySelector('[data-odds="away"]')};
+ const odds={};
+ for(const key of Object.keys(fields)){
+  const value=Number(fields[key]?.value);
+  if(!fields[key]?.value||!Number.isFinite(value)||value<=1){tool.querySelector(".odds-result").textContent="กรุณากรอกราคาให้ครบทั้ง 3 ช่อง และแต่ละราคาต้องมากกว่า 1.00";return;}
+  odds[key]=value;
+ }
+ const implied={home:1/odds.home,draw:1/odds.draw,away:1/odds.away};
+ const total=implied.home+implied.draw+implied.away;
+ const margin=(total-1)*100;
+ const names={home:"เจ้าบ้าน",draw:"เสมอ",away:"ทีมเยือน"};
+ const rows=["home","draw","away"].map(key=>{
+  const market=implied[key]/total*100;
+  const apiRaw=tool.dataset["api"+key[0].toUpperCase()+key.slice(1)];
+  const api=apiRaw===""?null:Number(apiRaw);
+  const gap=api===null?"ไม่มีข้อมูล API":`${(api-market).toFixed(1)>0?"+":""}${(api-market).toFixed(1)} จุด`;
+  const fair=api!==null&&api>0?`ราคาเทียบเท่าจาก API ${ (100/api).toFixed(2) }` : "ราคาเทียบเท่าจาก API -";
+  return `<div class="odds-row"><span>${names[key]}<br><strong>${market.toFixed(1)}%</strong></span><span>API: ${api===null?"-":api+"%"}<br>${gap}</span><span>ราคา: ${odds[key].toFixed(2)}<br>${fair}</span></div>`;
+ }).join("");
+ tool.querySelector(".odds-result").innerHTML=`<div><b>ความน่าจะเป็นโดยนัยหลังปรับสัดส่วน:</b> ${rows}</div><div style="margin-top:9px"><b>ส่วนต่างรวมของราคา (overround): ${margin.toFixed(2)}%</b></div><div class="prediction-note">ส่วนต่างระหว่าง API กับตลาดเป็นเพียงการเปรียบเทียบตัวเลข ไม่ได้ยืนยันว่าราคามีความคุ้มค่า และความน่าจะเป็นจาก API อาจไม่ได้ผ่านการปรับเทียบ</div>`;
+}
 matchesBox.addEventListener("click",event=>{
+ const calc=event.target.closest("[data-calc-odds]");
+ if(calc){const tool=calc.closest(".odds-tool");if(tool)calculateOdds(tool);return;}
  const button=event.target.closest(".predict-btn");if(!button)return;
  const id=Number(button.dataset.fixtureId),box=document.getElementById("prediction-"+id);
  if(box)loadPrediction(id,button,box);
