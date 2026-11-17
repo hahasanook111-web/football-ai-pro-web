@@ -4,422 +4,185 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#071426">
-<title>FOOTBALL AI PRO PRO 8 FINAL</title>
+<title>FOOTBALL AI PRO 10 FINAL</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#071426;color:#fff;font-family:Arial,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:#071426;color:#fff;font-family:Arial,sans-serif}
 header{background:linear-gradient(120deg,#102e50,#087c70);padding:24px 16px;text-align:center}
-header h1{margin:0;color:#55f2bd;font-size:27px}
-header p{margin:8px 0 0;color:#d6e9f5}
-main{max-width:900px;margin:auto;padding:16px}
-.panel{background:#10243b;border:1px solid #24415c;border-radius:14px;padding:15px;margin-bottom:15px}
-.controls{display:flex;gap:10px;flex-wrap:wrap}
-input,button{padding:12px;border-radius:9px;border:1px solid #35536c;font-size:15px}
-input{background:#071426;color:white;flex:1;min-width:150px}
-button{background:#10b981;color:#041b18;font-weight:bold;cursor:pointer}
-button:disabled{opacity:.6;cursor:wait}
-.status{color:#a8c5d9;font-size:14px;margin-top:10px}
-.match{background:#10243b;border:1px solid #24415c;border-radius:13px;padding:15px;margin:12px 0}
-.league{color:#55f2bd;font-size:13px;margin-bottom:12px}
-.teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;text-align:center}
-.team{font-weight:bold;overflow-wrap:anywhere}
-.team img{width:38px;height:38px;object-fit:contain;display:block;margin:0 auto 7px}
-.score{font-size:21px;font-weight:bold;color:#55f2bd;white-space:nowrap}
-.meta{color:#a8c5d9;font-size:13px;text-align:center;margin-top:12px}
-.analysis{border-top:1px solid #29445d;margin-top:12px;padding-top:12px;color:#d6e9f5;font-size:14px;line-height:1.6}
-.predict-btn{width:100%;margin-top:12px;background:#087c70;color:white}
-.prediction{margin-top:12px;padding:13px;background:#071c30;border:1px solid #28516a;border-radius:10px;color:#d6e9f5;font-size:14px;line-height:1.7;overflow-wrap:anywhere}
-.prediction h4{color:#55f2bd;margin:0 0 9px}
-.percentages{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0}
-.percent{background:#10243b;border-radius:8px;padding:9px 4px;text-align:center}
-.percent strong{display:block;color:#55f2bd;font-size:19px}
-.percent span{font-size:12px;color:#a8c5d9}
-.prediction-note{color:#a8c5d9;font-size:12px;margin-top:8px}
-.pro-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:10px 0}
-.pro-card{background:#10243b;border:1px solid #29445d;border-radius:9px;padding:10px;min-width:0}
-.pro-card strong{color:#55f2bd}
-.pro-title{color:#55f2bd;font-weight:bold;margin:14px 0 6px}
-.bar-row{display:grid;grid-template-columns:76px 1fr 42px;gap:7px;align-items:center;margin:7px 0;font-size:12px}
-.bar-bg{height:9px;background:#29445d;border-radius:9px;overflow:hidden}
-.bar-fill{height:100%;background:#10b981;border-radius:9px}
-.tag{display:inline-block;border:1px solid #35536c;border-radius:20px;padding:2px 8px;font-size:11px;color:#b8d5e6;margin:2px}
-.warn{color:#ffd28a}
-.score-pick{font-size:25px;font-weight:bold;color:#55f2bd;text-align:center;padding:8px}
-.risk-low{border-left:4px solid #10b981}.risk-medium{border-left:4px solid #f59e0b}.risk-high{border-left:4px solid #ef4444}.risk-score{font-size:25px;font-weight:bold;margin:5px 0}.risk-factor{margin:5px 0;color:#d6e9f5}.data-source{border-left:3px solid #10b981;padding-left:10px;margin:9px 0}
-.system-source{border-left:3px solid #60a5fa;padding-left:10px;margin:9px 0}
+header h1{margin:0;color:#55f2bd;font-size:27px}header p{margin:8px 0 0;color:#d6e9f5}
+main{max-width:900px;margin:auto;padding:16px}.panel,.match{background:#10243b;border:1px solid #24415c;border-radius:14px;padding:15px;margin-bottom:15px}
+.controls{display:flex;gap:10px;flex-wrap:wrap}input,button{padding:12px;border-radius:9px;border:1px solid #35536c;font-size:15px}
+input{background:#071426;color:white;flex:1;min-width:150px}button{background:#10b981;color:#041b18;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.6;cursor:wait}.status,.note{color:#a8c5d9;font-size:13px;margin-top:9px;line-height:1.5}
+.league{color:#55f2bd;font-size:13px;margin-bottom:12px}.teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;text-align:center}
+.team{font-weight:bold;overflow-wrap:anywhere}.team img{width:38px;height:38px;object-fit:contain;display:block;margin:0 auto 7px}
+.score{font-size:21px;font-weight:bold;color:#55f2bd;white-space:nowrap}.meta{color:#a8c5d9;font-size:13px;text-align:center;margin-top:12px}
+.predict-btn{width:100%;margin-top:12px;background:#087c70;color:white}.prediction{margin-top:12px;padding:13px;background:#071c30;border:1px solid #28516a;border-radius:10px;color:#d6e9f5;font-size:14px;line-height:1.65;overflow-wrap:anywhere}
+.prediction h4{color:#55f2bd;margin:0 0 9px}.title{color:#55f2bd;font-weight:bold;margin:15px 0 7px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:10px 0}.card{background:#10243b;border:1px solid #29445d;border-radius:9px;padding:10px;min-width:0}
+.card strong{color:#55f2bd}.percentages{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0}
+.percent{background:#10243b;border-radius:8px;padding:9px 4px;text-align:center}.percent strong{display:block;color:#55f2bd;font-size:19px}.percent span{font-size:12px;color:#a8c5d9}
 .odds-inputs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}
 .odds-field{background:#10243b;border:1px solid #29445d;border-radius:9px;padding:9px;min-width:0}
-.odds-field label{display:block;color:#a8c5d9;font-size:12px;margin-bottom:5px}
-.odds-field input{width:100%;min-width:0;padding:9px;margin:0;font-size:14px}
-.odds-calc{width:100%;margin:5px 0;background:#087c70;color:white}
-.odds-result{margin-top:10px}
-.odds-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:7px 0;border-bottom:1px solid #29445d;font-size:12px}
-.odds-row strong{color:#55f2bd}
-.extra-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}
-.extra-actions button{width:100%;background:#145b78;color:#fff;font-size:13px}
-.extra-result{background:#071c30;border:1px solid #29445d;border-radius:9px;padding:10px;margin:8px 0;font-size:13px;line-height:1.6}
-.extra-result h5{color:#55f2bd;margin:0 0 7px;font-size:14px}
+.odds-field label{display:block;color:#a8c5d9;font-size:12px;margin-bottom:5px}.odds-field input{width:100%;min-width:0;padding:9px;margin:0;font-size:14px}
+.action-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}.action-grid button{width:100%;background:#145b78;color:#fff;font-size:13px}
+.result{background:#071c30;border:1px solid #29445d;border-radius:9px;padding:10px;margin:8px 0;font-size:13px;line-height:1.6}
+.result h5{color:#55f2bd;margin:0 0 7px;font-size:14px}.risk-high{border-left:4px solid #ef4444}.risk-medium{border-left:4px solid #f59e0b}.risk-low{border-left:4px solid #10b981}
+.risk-score,.score-pick{font-size:25px;font-weight:bold;color:#55f2bd}.score-pick{text-align:center;padding:8px}
 .final-summary{border:1px solid #27745f;background:#0b2b2b;border-radius:10px;padding:12px;margin:10px 0}
-.final-summary strong{color:#55f2bd}
-.extra-actions button:disabled{opacity:.6}
-@media(max-width:420px){.odds-inputs{grid-template-columns:1fr}.odds-row{font-size:11px}}
-.empty{text-align:center;color:#b7ccdc;padding:28px 10px}
+.warn{color:#ffd28a}.source{border-left:3px solid #60a5fa;padding-left:10px;margin:9px 0}.bar{height:9px;background:#29445d;border-radius:9px;overflow:hidden;margin:5px 0}
+.fill{height:100%;background:#10b981}.empty{text-align:center;color:#b7ccdc;padding:28px 10px}
 footer{text-align:center;color:#7894aa;font-size:12px;padding:20px}
-@media(max-width:520px){main{padding:10px}.pro-grid{grid-template-columns:1fr}.percent strong{font-size:16px}.bar-row{grid-template-columns:68px 1fr 38px}}
+@media(max-width:520px){main{padding:10px}.grid{grid-template-columns:1fr}.percent strong{font-size:16px}}
+@media(max-width:420px){.odds-inputs{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<header>
-<h1>⚽ FOOTBALL AI PRO</h1>
-<p>ระบบติดตามและวิเคราะห์ฟุตบอล · PRO 8 FINAL</p>
-</header>
+<header><h1>⚽ FOOTBALL AI PRO</h1><p>ระบบติดตามและวิเคราะห์ฟุตบอล · PRO 10 FINAL</p></header>
 <main>
-<div class="panel">
-<h3>📅 โปรแกรมการแข่งขัน</h3>
-<div class="controls">
-<input type="date" id="matchDate">
-<button onclick="loadMatches()">ค้นหาบอล</button>
-</div>
-<div class="status" id="status">กำลังเตรียมระบบ...</div>
-</div>
-<div class="panel">
-<strong>🌍 รายการแข่งขันทั่วโลก</strong>
-<div class="status">ข้อมูลการแข่งขันจาก API-Football ผ่าน Backend · วิเคราะห์เฉพาะคู่ที่เลือกเพื่อลดการใช้โควตา API</div>
-</div>
-<div id="matches"></div>
+ <section class="panel">
+  <h3>📅 โปรแกรมการแข่งขัน</h3>
+  <div class="controls"><input type="date" id="matchDate"><button id="searchBtn">ค้นหาบอล</button></div>
+  <div class="status" id="status">กำลังเตรียมระบบ...</div>
+ </section>
+ <section class="panel"><strong>🌍 รายการแข่งขันทั่วโลก</strong><div class="status">ข้อมูลจาก API-Football ผ่าน Backend · เรียกวิเคราะห์เฉพาะคู่ที่เลือกเพื่อลดการใช้โควตา</div></section>
+ <div id="matches"></div>
 </main>
-<footer>FOOTBALL AI PRO PRO 8 FINAL · บทวิเคราะห์เพื่อประกอบการติดตามกีฬา ไม่รับประกันผลการแข่งขัน</footer>
+<footer>FOOTBALL AI PRO 10 FINAL · บทวิเคราะห์เพื่อประกอบการติดตามกีฬา ไม่รับประกันผลการแข่งขัน</footer>
 <script>
+"use strict";
 const API="https://football-ai-pro-backend.onrender.com";
-const dateInput=document.getElementById("matchDate");
-const statusBox=document.getElementById("status");
-const matchesBox=document.getElementById("matches");
-const predictionCache={};
-function localDate(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;}
+const dateInput=document.getElementById("matchDate"),statusBox=document.getElementById("status"),matchesBox=document.getElementById("matches");
+const predictionCache=Object.create(null);
+const localDate=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;};
 dateInput.value=localDate();
-function safe(value){return String(value??"-").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function getMatches(data){
- if(Array.isArray(data))return data;
- if(Array.isArray(data?.response))return data.response;
- if(Array.isArray(data?.data?.response))return data.data.response;
- if(Array.isArray(data?.data))return data.data;
- if(Array.isArray(data?.fixtures))return data.fixtures;
- return null;
-}
-function matchTime(item){
- const date=item?.fixture?.date||item?.date;if(!date)return "-";
- return new Date(date).toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit",timeZone:"Asia/Bangkok"})+" น.";
-}
+function safe(v){return String(v??"-").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function arr(data){if(Array.isArray(data))return data;if(Array.isArray(data?.response))return data.response;if(Array.isArray(data?.data?.response))return data.data.response;if(Array.isArray(data?.data))return data.data;if(Array.isArray(data?.fixtures))return data.fixtures;return [];}
+function extract(data){if(data?.error)throw Error(typeof data.error==="string"?data.error:JSON.stringify(data.error));return arr(data)[0]||data?.response||null;}
+function n(v){if(v===null||v===undefined||v==="")return null;const x=Number(String(v).replace("%","").trim());return Number.isFinite(x)?x:null;}
+function avg(v){if(v===null||v===undefined)return null;if(typeof v==="object")return n(v.average);return n(v);}
+function fmtTime(item){const d=item?.fixture?.date||item?.date;if(!d)return "-";return new Date(d).toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit",timeZone:"Asia/Bangkok"})+" น.";}
 function renderMatch(item){
- const fixture=item.fixture||item,league=item.league||{},teams=item.teams||{};
- const home=teams.home||item.home||{},away=teams.away||item.away||{},goals=item.goals||{};
- const status=fixture.status?.long||fixture.status?.short||"รอแข่งขัน",elapsed=fixture.status?.elapsed;
- const finished=["FT","AET","PEN"].includes(fixture.status?.short);
- const score=goals.home!=null&&goals.away!=null?`${goals.home} - ${goals.away}`:"VS";
- const homeLogo=home.logo?`<img src="${safe(home.logo)}" alt="">`:"";
- const awayLogo=away.logo?`<img src="${safe(away.logo)}" alt="">`:"";
- const fixtureId=Number(fixture.id||item.fixture_id||0);
- const valid=Number.isSafeInteger(fixtureId)&&fixtureId>0;
- return `<article class="match">
- <div class="league">🏆 ${safe(league.name||"รายการแข่งขัน")} · ${safe(league.country||"")}</div>
- <div class="teams"><div class="team">${homeLogo}${safe(home.name||"ทีมเจ้าบ้าน")}</div><div class="score">${safe(score)}</div><div class="team">${awayLogo}${safe(away.name||"ทีมเยือน")}</div></div>
- <div class="meta">🕒 ${safe(matchTime(item))} · ${safe(status)} ${elapsed?`(${safe(elapsed)}')`:""}</div>
- <div class="analysis"><b>🤖 FOOTBALL AI PRO PRO</b><br>${finished?"การแข่งขันสิ้นสุดแล้ว สามารถเปิดดูข้อมูลคาดการณ์และสถิติที่ผู้ให้บริการมีให้":"กดปุ่มด้านล่างเพื่อวิเคราะห์ฟอร์ม เกมรุก เกมรับ และสกอร์คาดการณ์"}</div>
- ${valid?`<button class="predict-btn" data-fixture-id="${fixtureId}">🤖 วิเคราะห์การแข่งขัน PRO</button><div class="prediction" id="prediction-${fixtureId}" hidden></div>`:`<div class="prediction">ไม่พบรหัสการแข่งขัน จึงไม่สามารถเรียกข้อมูลวิเคราะห์ได้</div>`}
- </article>`;
+ const f=item.fixture||item,l=item.league||{},t=item.teams||{},h=t.home||{},a=t.away||{},g=item.goals||{},id=Number(f.id||item.fixture_id||0);
+ const finished=["FT","AET","PEN"].includes(f.status?.short);
+ const score=g.home!=null&&g.away!=null?`${g.home} - ${g.away}`:"VS";
+ return `<article class="match"><div class="league">🏆 ${safe(l.name||"รายการแข่งขัน")} · ${safe(l.country||"")}</div>
+ <div class="teams"><div class="team">${h.logo?`<img src="${safe(h.logo)}" alt="">`:""}${safe(h.name||"เจ้าบ้าน")}</div><div class="score">${safe(score)}</div><div class="team">${a.logo?`<img src="${safe(a.logo)}" alt="">`:""}${safe(a.name||"ทีมเยือน")}</div></div>
+ <div class="meta">🕒 ${safe(fmtTime(item))} · ${safe(f.status?.long||f.status?.short||"รอแข่งขัน")} ${f.status?.elapsed?`(${safe(f.status.elapsed)}')`:""}</div>
+ <div class="note">${finished?"การแข่งขันสิ้นสุดแล้ว สามารถเปิดดูข้อมูลที่ API มีให้":"เลือกวิเคราะห์เพื่อดูข้อมูลคาดการณ์และสถิติที่มีแหล่งข้อมูล"}</div>
+ ${Number.isSafeInteger(id)&&id>0?`<button class="predict-btn" data-predict="${id}">🤖 วิเคราะห์การแข่งขัน PRO</button><div class="prediction" id="prediction-${id}" hidden></div>`:"<div class='result'>ไม่พบรหัสการแข่งขัน</div>"}</article>`;
 }
-function extractResult(data){
- if(data?.error)throw new Error(typeof data.error==="string"?data.error:JSON.stringify(data.error));
- if(Array.isArray(data?.response))return data.response[0]||null;
- if(Array.isArray(data?.data?.response))return data.data.response[0]||null;
- if(data?.response&&!Array.isArray(data.response))return data.response;
- if(data?.data&&!Array.isArray(data.data))return data.data;
- return data||null;
+function stats(team){
+ const last=team?.last_5||{},goals=last.goals||team?.league?.goals||team?.goals||{},gf=goals.for||{},ga=goals.against||{};
+ const leagueGoals=team?.league?.goals||{},played=team?.league?.fixtures?.played||{};
+ const split=(obj,side)=>obj?.average&&typeof obj.average==="object"?n(obj.average[side]):n(obj?.[side]);
+ return {played:n(last.played)??0,form:last.form||"",gf:avg(gf),ga:avg(ga),homeGF:split(leagueGoals.for,"home"),homeGA:split(leagueGoals.against,"home"),awayGF:split(leagueGoals.for,"away"),awayGA:split(leagueGoals.against,"away"),homePlayed:n(played.home),awayPlayed:n(played.away)};
 }
-function num(v){if(v===null||v===undefined||v==="")return null;const n=Number(String(v).replace("%","").trim());return Number.isFinite(n)?n:null;}
-function pct(v){const n=num(v);return n===null?"-":`${n}%`;}
-function avg(stat){
- if(stat===null||stat===undefined)return null;
- if(typeof stat==="number"||typeof stat==="string")return num(stat);
- return num(stat.average);
+function poisson(l,k){if(l<=0)return k===0?1:0;let p=Math.exp(-l);for(let i=1;i<=k;i++)p*=l/i;return p;}
+function scoreModel(h,a){let best=-1,bh=0,ba=0;for(let x=0;x<=6;x++)for(let y=0;y<=6;y++){const p=poisson(h,x)*poisson(a,y);if(p>best){best=p;bh=x;ba=y;}}return `${bh} - ${ba}`;}
+function goalModel(h,a){let o15=0,o25=0,btts=0;for(let x=0;x<=10;x++)for(let y=0;y<=10;y++){const p=poisson(h,x)*poisson(a,y);if(x+y>=2)o15+=p;if(x+y>=3)o25+=p;if(x>0&&y>0)btts+=p;}return {o15:o15*100,o25:o25*100,btts:btts*100};}
+function formText(v){if(!v)return "ไม่มีข้อมูล";const s=String(v).toUpperCase().replace(/[^WDL]/g,"").slice(-5);return s?s.split("").map(x=>x==="W"?"ชนะ":x==="D"?"เสมอ":"แพ้").join(" · "):String(v);}
+function renderOdds(ph,pd,pa){
+ return `<div class="title">💹 เปรียบเทียบราคาบอล PRO 4 · คงระบบเดิม</div><div class="card odds" data-ph="${ph??""}" data-pd="${pd??""}" data-pa="${pa??""}">
+ <div>กรอกราคา decimal odds จากแหล่งที่คุณตรวจสอบเอง</div><div class="odds-inputs">
+ ${["home","draw","away"].map((k,i)=>`<div class="odds-field"><label>${["เจ้าบ้านชนะ","เสมอ","ทีมเยือนชนะ"][i]}</label><input type="number" min="1.01" step="0.01" inputmode="decimal" data-odd="${k}" placeholder="Decimal odds"></div>`).join("")}</div>
+ <button data-odds-calc style="width:100%;background:#087c70;color:white">คำนวณและเปรียบเทียบราคา</button><div class="result" data-odds-result>กรอกราคาให้ครบทั้ง 3 ช่อง แล้วกดคำนวณ</div>
+ <div class="note">ความน่าจะเป็นโดยนัย = 1 ÷ ราคา decimal · ปรับสัดส่วนรวมเป็น 100% · ระบบไม่ดึงราคาเจ้ามืออัตโนมัติ และผลต่างไม่ใช่คำแนะนำการเดิมพัน</div></div>`;
 }
-function splitValue(stat,side){
- if(stat===null||stat===undefined)return null;
- // API-Football อาจส่งค่าเฉลี่ยแยก home/away หรือเป็นตัวเลขรวมเท่านั้น
- if(typeof stat==="object"){
-  const average=stat.average;
-  if(average&&typeof average==="object"&&average[side]!==undefined)return num(average[side]);
-  if(stat[side]!==undefined)return num(stat[side]);
- }
- return null;
-}
-function getTeamStats(team){
- const last=team?.last_5||{};
- const goals=last.goals||team?.league?.goals||team?.goals||{};
- const gf=goals.for||{},ga=goals.against||{};
- const leagueGoals=team?.league?.goals||{};
- const leagueFor=leagueGoals.for||{},leagueAgainst=leagueGoals.against||{};
- const fixtures=team?.league?.fixtures?.played||{};
- return {
-  played:num(last.played)??0,form:last.form||"",gf:avg(gf),ga:avg(ga),raw:last,
-  homeGF:splitValue(leagueFor,"home"),homeGA:splitValue(leagueAgainst,"home"),
-  awayGF:splitValue(leagueFor,"away"),awayGA:splitValue(leagueAgainst,"away"),
-  homePlayed:num(fixtures.home),awayPlayed:num(fixtures.away)
- };
-}
-function goalProbabilities(homeLambda,awayLambda){
- const dist=(lambda)=>Array.from({length:11},(_,k)=>poisson(lambda,k));
- const h=dist(homeLambda),a=dist(awayLambda);
- let over15=0,over25=0,btts=0;
- for(let x=0;x<h.length;x++)for(let y=0;y<a.length;y++){
-  const probability=h[x]*a[y];
-  if(x+y>=2)over15+=probability;
-  if(x+y>=3)over25+=probability;
-  if(x>=1&&y>=1)btts+=probability;
- }
- return {over15:over15*100,over25:over25*100,btts:btts*100};
-}
-function poisson(lambda,k){if(lambda<=0)return k===0?1:0;let p=Math.exp(-lambda);for(let i=1;i<=k;i++)p*=lambda/i;return p;}
-function estimateScore(h,a){
- const hg=Math.max(.15,Math.min(4.2,h)),ag=Math.max(.15,Math.min(4.2,a));
- let bestH=0,bestA=0,best=-1;
- for(let x=0;x<=6;x++)for(let y=0;y<=6;y++){const p=poisson(hg,x)*poisson(ag,y);if(p>best){best=p;bestH=x;bestA=y;}}
- return {home:bestH,away:bestA,homeLambda:hg,awayLambda:ag};
-}
-function formLabel(form){
- if(form===null||form===undefined||String(form).trim()==="")return "ไม่มีข้อมูลฟอร์ม";
- const raw=String(form).trim();
- const chars=raw.toUpperCase().replace(/[^WDL]/g,"").slice(-5);
- if(chars)return chars.split("").map(c=>c==="W"?"ชนะ":c==="D"?"เสมอ":"แพ้").join(" · ");
- const value=num(raw);
- if(value!==null&&raw.includes("%"))return `อัตราฟอร์มตามข้อมูล API ${value}%`;
- return `ข้อมูลฟอร์มจาก API: ${raw}`;
-}
-function riskAssessment({hs,as,hasPercent,pHome,pDraw,pAway,attackHome,attackAway,defenseHome,defenseAway,formHome,formAway,canEstimate}){
- let score=0;const factors=[];
- if(hs.played<5){score+=20;factors.push(`เจ้าบ้านมีข้อมูลย้อนหลังเพียง ${hs.played} จาก 5 นัด`);}
- if(as.played<5){score+=20;factors.push(`ทีมเยือนมีข้อมูลย้อนหลังเพียง ${as.played} จาก 5 นัด`);}
- if(!hasPercent||pHome===null||pDraw===null||pAway===null){score+=15;factors.push("เปอร์เซ็นต์คาดการณ์จาก API ไม่ครบทั้งสามผล");}
- else{
-  const sorted=[pHome,pDraw,pAway].slice().sort((a,b)=>b-a);const gap=sorted[0]-sorted[1];
-  if(gap<=10){score+=20;factors.push(`ผลคาดการณ์สองอันดับแรกใกล้กัน (ต่าง ${gap.toFixed(0)} จุดเปอร์เซ็นต์)`);}
-  else if(gap<=20){score+=10;factors.push(`ผลคาดการณ์ยังมีความสูสี (ต่าง ${gap.toFixed(0)} จุดเปอร์เซ็นต์)`);}
- }
- if(!canEstimate){score+=15;factors.push("ค่าเฉลี่ยประตูยิงได้/เสียไม่ครบสำหรับคำนวณสกอร์");}
- const hasComparison=[attackHome,attackAway,defenseHome,defenseAway,formHome,formAway].some(v=>v!==null);
- if(!hasComparison){score+=10;factors.push("ไม่มีคะแนนเปรียบเทียบฟอร์ม เกมรุก หรือเกมรับ");}
- score=Math.min(100,score);
- const level=score>=60?"สูง":score>=30?"ปานกลาง":"ต่ำ";
- const css=score>=60?"risk-high":score>=30?"risk-medium":"risk-low";
- const advice=score>=60?"ข้อมูลยังมีข้อจำกัดหลายด้าน ควรงดสรุปผลแบบมั่นใจ":score>=30?"ควรใช้ข้อมูลประกอบหลายด้าน และระวังการสรุปจากสถิติที่ยังไม่ครบ":"ข้อมูลที่มีค่อนข้างครบตามเกณฑ์เบื้องต้น แต่ยังไม่รับประกันผลการแข่งขัน";
- return {score,level,css,advice,factors};
-}
-function showPrediction(box,result){
- const pred=result?.predictions||result?.prediction||null;
- const teams=result?.teams||{};
- const home=teams.home||{},away=teams.away||{};
- const hs=getTeamStats(home),as=getTeamStats(away);
- const comparison=result?.comparison||{};
- const percent=pred?.percent||{};
- const pHome=num(percent.home),pDraw=num(percent.draw),pAway=num(percent.away);
- const hasPercent=[pHome,pDraw,pAway].some(v=>v!==null);
- let html="";
- if(pred){
-  html+=`<h4>📊 ข้อมูลคาดการณ์จาก API-Football</h4>`;
-  if(hasPercent)html+=`<div>โอกาสชนะตามข้อมูลผู้ให้บริการ</div><div class="percentages">
-   <div class="percent"><strong>${safe(pct(percent.home))}</strong><span>เจ้าบ้านชนะ</span></div>
-   <div class="percent"><strong>${safe(pct(percent.draw))}</strong><span>เสมอ</span></div>
-   <div class="percent"><strong>${safe(pct(percent.away))}</strong><span>ทีมเยือนชนะ</span></div></div>`;
-  if(pred.winner?.name)html+=`<div>🏆 ทีมที่มีแนวโน้มชนะ: <b>${safe(pred.winner.name)}</b></div>`;
-  if(pred.under_over)html+=`<div>⚽ แนวโน้มประตูสูง/ต่ำ: <b>${safe(pred.under_over)}</b></div>`;
-  if(pred.advice)html+=`<div>💡 คำแนะนำจาก API: ${safe(pred.advice)}</div>`;
-  if(!hasPercent&&!pred.winner?.name&&!pred.under_over&&!pred.advice)html+=`<div>ผู้ให้บริการยังไม่มีรายละเอียดการคาดการณ์สำหรับคู่นี้</div>`;
- }else{
-  html+=`<h4>📊 ข้อมูลคาดการณ์จาก API-Football</h4><div>ไม่พบข้อมูลคาดการณ์สำหรับคู่นี้ แต่ระบบจะแสดงบทวิเคราะห์เพิ่มเติมเท่าที่ข้อมูลรองรับ</div>`;
- }
- html+=`<div class="pro-title">📈 ฟอร์มย้อนหลังของทั้งสองทีม</div>
- <div class="pro-grid">
- <div class="pro-card"><strong>เจ้าบ้าน</strong><div>ลงแข่งในชุดข้อมูล: ${hs.played} นัด</div><div>ฟอร์ม: ${safe(formLabel(hs.form))}</div><div>ข้อมูลดิบจาก API: ${safe(hs.form||"ไม่มีข้อมูล")}</div>${hs.gf!==null?`<div>ยิงได้เฉลี่ย: ${hs.gf} ประตู/นัด</div>`:""}${hs.ga!==null?`<div>เสียเฉลี่ย: ${hs.ga} ประตู/นัด</div>`:""}</div>
- <div class="pro-card"><strong>ทีมเยือน</strong><div>ลงแข่งในชุดข้อมูล: ${as.played} นัด</div><div>ฟอร์ม: ${safe(formLabel(as.form))}</div><div>ข้อมูลดิบจาก API: ${safe(as.form||"ไม่มีข้อมูล")}</div>${as.gf!==null?`<div>ยิงได้เฉลี่ย: ${as.gf} ประตู/นัด</div>`:""}${as.ga!==null?`<div>เสียเฉลี่ย: ${as.ga} ประตู/นัด</div>`:""}</div></div>`;
- if(hs.played<5||as.played<5)html+=`<div class="prediction-note warn">⚠️ ข้อมูลย้อนหลังมีไม่ครบ 5 นัดอย่างน้อยหนึ่งทีม ระบบแสดงจำนวนเกมจริงที่ API ส่งมา ไม่เติมข้อมูลที่ขาด</div>`;
- const cAttack=num(comparison.att);
- const attackHome=num(comparison.att?.home),attackAway=num(comparison.att?.away);
- const defenseHome=num(comparison.def?.home),defenseAway=num(comparison.def?.away);
- const formHome=num(comparison.form?.home),formAway=num(comparison.form?.away);
- html+=`<div class="pro-title">⚔️ เปรียบเทียบเกมรุกและเกมรับ</div>`;
- if(attackHome!==null||attackAway!==null||defenseHome!==null||defenseAway!==null||formHome!==null||formAway!==null){
-  html+=`<div class="pro-card">`;
-  const rows=[["ฟอร์ม",formHome,formAway],["เกมรุก",attackHome,attackAway],["เกมรับ",defenseHome,defenseAway]];
-  rows.forEach(([label,h,a])=>{if(h!==null||a!==null){html+=`<div style="margin:8px 0"><b>${label}</b><div class="bar-row"><span>เจ้าบ้าน</span><div class="bar-bg"><div class="bar-fill" style="width:${Math.max(0,Math.min(100,h??0))}%"></div></div><span>${h===null?"-":h+"%"}</span></div><div class="bar-row"><span>ทีมเยือน</span><div class="bar-bg"><div class="bar-fill" style="width:${Math.max(0,Math.min(100,a??0))}%"></div></div><span>${a===null?"-":a+"%"}</span></div></div>`;}});
-  html+=`</div>`;
- }else{
-  html+=`<div class="pro-card">ยังไม่มีคะแนนเปรียบเทียบจาก API สำหรับคู่นี้</div>`;
- }
- const comparisonRows=[["ฟอร์ม",formHome,formAway],["เกมรุก",attackHome,attackAway],["เกมรับ",defenseHome,defenseAway]];
- const homeEdges=comparisonRows.filter(r=>r[1]!==null&&r[2]!==null&&r[1]>r[2]).map(r=>r[0]);
- const awayEdges=comparisonRows.filter(r=>r[1]!==null&&r[2]!==null&&r[2]>r[1]).map(r=>r[0]);
- html+=`<div class="pro-title">🧩 จุดเด่นและด้านที่ควรระวัง</div>`;
- if(homeEdges.length||awayEdges.length){
-  html+=`<div class="pro-grid"><div class="pro-card"><strong>เจ้าบ้าน</strong><div>${homeEdges.length?`คะแนนเปรียบเทียบสูงกว่าในด้าน: ${safe(homeEdges.join(", "))}`:"ยังไม่พบด้านที่มีคะแนนเปรียบเทียบสูงกว่า"}</div></div><div class="pro-card"><strong>ทีมเยือน</strong><div>${awayEdges.length?`คะแนนเปรียบเทียบสูงกว่าในด้าน: ${safe(awayEdges.join(", "))}`:"ยังไม่พบด้านที่มีคะแนนเปรียบเทียบสูงกว่า"}</div></div></div><div class="prediction-note">การสรุปนี้อ้างอิงเฉพาะคะแนนเปรียบเทียบจาก API ไม่ใช่การวัดคุณภาพทีมโดยตรง</div>`;
- }else{
-  html+=`<div class="pro-card">คะแนนเปรียบเทียบยังไม่เพียงพอสำหรับระบุจุดเด่นของแต่ละทีม</div>`;
- }
- html+=`<div class="pro-title">🏟️ วิเคราะห์ฟอร์มเหย้า–เยือน PRO 5</div>`;
- const splitReady=[hs.homeGF,hs.homeGA,as.awayGF,as.awayGA].every(v=>v!==null);
- html+=`<div class="pro-grid">
- <div class="pro-card"><strong>เจ้าบ้าน · สถิติในบ้าน</strong><div>ยิงได้เฉลี่ย: ${hs.homeGF===null?"ไม่มีข้อมูล":hs.homeGF+" ประตู/นัด"}</div><div>เสียเฉลี่ย: ${hs.homeGA===null?"ไม่มีข้อมูล":hs.homeGA+" ประตู/นัด"}</div><div>จำนวนเกมในบ้าน: ${hs.homePlayed===null?"ไม่มีข้อมูล":hs.homePlayed+" นัด"}</div></div>
- <div class="pro-card"><strong>ทีมเยือน · สถิตินอกบ้าน</strong><div>ยิงได้เฉลี่ย: ${as.awayGF===null?"ไม่มีข้อมูล":as.awayGF+" ประตู/นัด"}</div><div>เสียเฉลี่ย: ${as.awayGA===null?"ไม่มีข้อมูล":as.awayGA+" ประตู/นัด"}</div><div>จำนวนเกมนอกบ้าน: ${as.awayPlayed===null?"ไม่มีข้อมูล":as.awayPlayed+" นัด"}</div></div></div>
- <div class="prediction-note">ระบบใช้สถิติแยกเหย้า–เยือนจากข้อมูลลีกที่ API ส่งมาเท่านั้น หากไม่มีข้อมูลจะแสดงว่าไม่มีข้อมูล ไม่สร้างตัวเลขทดแทน</div>`;
- html+=`<div class="pro-title">🎯 สกอร์และโอกาสทำประตู PRO 5</div>`;
- const canEstimate=hs.gf!==null&&hs.ga!==null&&as.gf!==null&&as.ga!==null&&hs.played>0&&as.played>0;
- if(canEstimate){
-  const hExpected=splitReady?(hs.homeGF+as.awayGA)/2:(hs.gf+as.ga)/2;
-  const aExpected=splitReady?(as.awayGF+hs.homeGA)/2:(as.gf+hs.ga)/2;
-  const est=estimateScore(hExpected,aExpected);
-  const probs=goalProbabilities(est.homeLambda,est.awayLambda);
-  html+=`<div class="pro-card"><div class="score-pick">${est.home} - ${est.away}</div><div style="text-align:center">สกอร์ที่มีความน่าจะเป็นสูงสุดจากแบบจำลองประตูอย่างง่าย</div><div class="prediction-note">ค่าเฉลี่ยประตูคาดหมาย: เจ้าบ้าน ${est.homeLambda.toFixed(2)} · ทีมเยือน ${est.awayLambda.toFixed(2)}</div><div class="prediction-note">แหล่งคำนวณ: ${splitReady?"สถิติยิงได้/เสียแยกเหย้า–เยือน":"ค่าเฉลี่ยรวมที่ API ส่งมา (ไม่มีข้อมูลแยกเหย้า–เยือนครบ)"}</div><div class="pro-title">📊 ความน่าจะเป็นจากแบบจำลองประตู</div><div class="percentages"><div class="percent"><strong>${probs.over15.toFixed(1)}%</strong><span>สูงกว่า 1.5 ประตู</span></div><div class="percent"><strong>${probs.over25.toFixed(1)}%</strong><span>สูงกว่า 2.5 ประตู</span></div><div class="percent"><strong>${probs.btts.toFixed(1)}%</strong><span>ทั้งสองทีมยิงได้</span></div></div><div class="prediction-note">ตัวเลขเป็นผลจากแบบจำลอง Poisson อย่างง่ายโดยใช้ค่าเฉลี่ยประตู ไม่ใช่เปอร์เซ็นต์จาก API-Football และไม่ใช่การรับประกันผล</div></div>`;
- }else{
-  html+=`<div class="pro-card">ข้อมูลค่าเฉลี่ยประตูยิงได้/เสียของทั้งสองทีมยังไม่ครบ จึงไม่คำนวณสกอร์หรือเปอร์เซ็นต์โอกาสทำประตูแทนข้อมูลจริง</div>`;
- }
- html+=`<div class="pro-title">🛡️ ประเมินความเสี่ยงและความไม่แน่นอน PRO 3 · คงระบบเดิม</div>`;
- const risk=riskAssessment({hs,as,hasPercent,pHome,pDraw,pAway,attackHome,attackAway,defenseHome,defenseAway,formHome,formAway,canEstimate});
- html+=`<div class="pro-card ${risk.css}"><strong>ระดับความเสี่ยงด้านข้อมูล: ${risk.level}</strong><div class="risk-score">${risk.score}/100</div><div>คะแนนนี้เป็นดัชนีข้อจำกัดของข้อมูลและความสูสีของผลคาดการณ์ ไม่ใช่โอกาสแพ้ชนะหรือความเสี่ยงการเดิมพัน</div><div class="prediction-note"><b>เหตุผลประกอบ</b></div>${risk.factors.length?risk.factors.map(x=>`<div class="risk-factor">• ${safe(x)}</div>`).join(""):`<div class="risk-factor">• ไม่พบข้อจำกัดหลักตามเกณฑ์ที่ระบบตรวจสอบ</div>`}<div class="prediction-note"><b>แนวทางอ่านผล:</b> ${safe(risk.advice)}</div></div>`;
- html+=`<div class="pro-title">💹 เปรียบเทียบราคาบอล PRO 4 · คงระบบเดิม</div>
- <div class="pro-card odds-tool" data-api-home="${pHome===null?"":pHome}" data-api-draw="${pDraw===null?"":pDraw}" data-api-away="${pAway===null?"":pAway}">
-  <div>กรอกราคา decimal odds จากแหล่งที่คุณตรวจสอบเอง เพื่อเปรียบเทียบกับเปอร์เซ็นต์คาดการณ์จาก API</div>
-  <div class="odds-inputs">
-   <div class="odds-field"><label>เจ้าบ้านชนะ</label><input type="number" inputmode="decimal" min="1.01" step="0.01" placeholder="เช่น 2.10" data-odds="home"></div>
-   <div class="odds-field"><label>เสมอ</label><input type="number" inputmode="decimal" min="1.01" step="0.01" placeholder="เช่น 3.20" data-odds="draw"></div>
-   <div class="odds-field"><label>ทีมเยือนชนะ</label><input type="number" inputmode="decimal" min="1.01" step="0.01" placeholder="เช่น 3.50" data-odds="away"></div>
-  </div>
-  <button type="button" class="odds-calc" data-calc-odds>คำนวณและเปรียบเทียบราคา</button>
-  <div class="odds-result prediction-note" aria-live="polite">กรอกราคาให้ครบทั้ง 3 ช่อง แล้วกดคำนวณ ระบบจะหาความน่าจะเป็นโดยนัยและส่วนต่างจาก API</div>
-  <div class="prediction-note">สูตร: ความน่าจะเป็นโดยนัย = 1 ÷ ราคา decimal · ส่วนต่างราคาตลาดคำนวณจากผลรวมความน่าจะเป็นทั้งสามผลลัพธ์ ลบ 100%</div>
-  <div class="prediction-note warn">หากไม่มีราคาอ้างอิง อย่ากรอกตัวเลขคาดเดา ระบบไม่ได้ดึงราคาเจ้ามืออัตโนมัติ และผลต่างไม่ใช่คำแนะนำการเดิมพัน</div>
- </div>`;
- const fixtureId=Number(String(box.id||"").replace("prediction-",""));
- const homeId=num(teams.home?.id),awayId=num(teams.away?.id);
- html+=`<div class="pro-title">🩺 ความพร้อมทีมและรายชื่อผู้เล่น PRO 6</div>
- <div class="pro-card">ตรวจสอบรายชื่อผู้เล่นตัวจริงและข้อมูลผู้เล่นบาดเจ็บ/ติดโทษแบนจาก API เมื่อ Backend และแพ็กเกจข้อมูลรองรับ
- <div class="extra-actions"><button type="button" data-extra="lineups" data-fixture="${fixtureId}">👥 โหลดรายชื่อผู้เล่น</button><button type="button" data-extra="injuries" data-fixture="${fixtureId}">🩹 โหลดข้อมูลผู้บาดเจ็บ</button></div>
- <div class="extra-result" id="extra-lineups-${fixtureId}">ยังไม่ได้เรียกข้อมูลรายชื่อผู้เล่น</div>
- <div class="extra-result" id="extra-injuries-${fixtureId}">ยังไม่ได้เรียกข้อมูลผู้บาดเจ็บ</div>
- <div class="prediction-note">ข้อมูลจะไม่ถูกแต่งเติม หาก API ไม่มีข้อมูลหรือแพ็กเกจไม่รองรับ ระบบจะแจ้งให้ทราบ</div></div>`;
- html+=`<div class="pro-title">📚 สถิติพบกันและการตรวจสอบเชิงลึก PRO 7</div>
- <div class="pro-card"><div>รหัสทีมเจ้าบ้าน: ${homeId===null?"ไม่มีข้อมูล":safe(homeId)} · รหัสทีมเยือน: ${awayId===null?"ไม่มีข้อมูล":safe(awayId)}</div>
- <div class="extra-result">สถิติพบกันย้อนหลัง (H2H) ต้องใช้ Backend route ที่ส่ง team IDs ทั้งสองทีมไปยัง API-Football โดยตรง ขณะนี้ Backend ที่เชื่อมอยู่ยังไม่ได้ยืนยันว่ามี route นี้ จึงไม่แสดงตัวเลข H2H ที่ไม่มีแหล่งข้อมูล</div>
- <div class="prediction-note">เมื่อต่อ API H2H แล้ว รุ่นนี้สามารถนำผลพบกันย้อนหลังมาประกอบการวิเคราะห์ได้ โดยไม่ใช้แทนฟอร์มปัจจุบัน</div></div>`;
- html+=`<div class="pro-title">🧪 ตรวจสอบคุณภาพบทวิเคราะห์ PRO 8</div>`;
- const checks=[
-  ["ข้อมูลคาดการณ์ API",!!pred],
-  ["เปอร์เซ็นต์ 1X2 ครบ",[pHome,pDraw,pAway].every(v=>v!==null)],
-  ["สถิติฟอร์มทั้งสองทีม",hs.played>0&&as.played>0],
-  ["ค่าเฉลี่ยประตูทั้งสองทีม",canEstimate],
-  ["ข้อมูลเหย้า–เยือนครบ",splitReady],
-  ["คะแนนเปรียบเทียบจาก API",[attackHome,attackAway,defenseHome,defenseAway,formHome,formAway].some(v=>v!==null)]
- ];
- const passed=checks.filter(x=>x[1]).length;
- html+=`<div class="final-summary"><strong>ความพร้อมของข้อมูล ${passed}/${checks.length} รายการ</strong><div class="prediction-note">เป็นจำนวนหมวดข้อมูลที่ตรวจพบ ไม่ใช่คะแนนความแม่นยำของการทำนาย</div>${checks.map(x=>`<div>${x[1]?"✅":"⚪"} ${safe(x[0])}: ${x[1]?"พบข้อมูล":"ไม่มีข้อมูล/ไม่ครบ"}</div>`).join("")}</div>`;
- html+=`<div class="prediction-note warn">ข้อจำกัดของรุ่น FINAL: ข้อมูลตัวจริง ผู้บาดเจ็บ และ H2H ขึ้นกับการเปิดใช้งาน endpoint และสิทธิ์ API-Football ของ Backend ไม่สามารถรับประกันว่าทุกลีกจะมีข้อมูลครบ</div>`;
- html+=`<div class="pro-title">🧭 ระดับความชัดเจนของข้อมูล</div>`;
- const sample=Math.min(hs.played,5)+Math.min(as.played,5);
- let clarity=sample>=8?"ค่อนข้างดี":sample>=5?"ปานกลาง":"จำกัด";
- if(!hasPercent&&sample<5)clarity="จำกัด";
- html+=`<div class="pro-card"><strong>${clarity}</strong><div>ข้อมูลเกมย้อนหลังที่มี: ${sample}/10 นัดรวมสองทีม</div><div class="prediction-note">ระดับนี้เป็นตัวบ่งชี้ความครบถ้วนของข้อมูลและจำนวนตัวอย่าง ไม่ใช่เปอร์เซ็นต์ความแม่นยำที่ผ่านการทดสอบ</div></div>`;
- html+=`<div class="prediction-note data-source"><b>ข้อมูลจาก API-Football:</b> เปอร์เซ็นต์คาดการณ์, ทีมที่มีแนวโน้มชนะ, คำแนะนำ, ฟอร์มย้อนหลัง และคะแนนเปรียบเทียบ (แสดงเฉพาะเมื่อ API ส่งข้อมูลมา)</div>
- <div class="prediction-note system-source"><b>บทวิเคราะห์เพิ่มเติมของระบบ PRO 5:</b> การแสดงฟอร์มเปอร์เซ็นต์, การเปรียบเทียบจุดเด่น, วิเคราะห์สถิติแยกเหย้า–เยือน, คำนวณสกอร์และโอกาสทำประตูจากค่าเฉลี่ยประตู, ดัชนีความเสี่ยงด้านข้อมูล และระดับความชัดเจนของข้อมูล เป็นการประเมินอย่างง่าย ไม่ใช่ข้อมูลหรือคำรับรองจาก API-Football</div>
- <div class="prediction-note">หมายเหตุ: สถิติอาจมีจำนวนเกมไม่ครบ 5 นัด และผลฟุตบอลจริงอาจแตกต่างจากการคาดการณ์</div>`;
+function renderAnalysis(box,r){
+ const pred=r?.predictions||r?.prediction||null,teams=r?.teams||{},home=teams.home||{},away=teams.away||{},hs=stats(home),as=stats(away),comp=r?.comparison||{},p=pred?.percent||{};
+ const ph=n(p.home),pd=n(p.draw),pa=n(p.away),hasPct=[ph,pd,pa].every(x=>x!==null);
+ const ah=n(comp.att?.home),aa=n(comp.att?.away),dh=n(comp.def?.home),da=n(comp.def?.away),fh=n(comp.form?.home),fa=n(comp.form?.away);
+ const canGoals=[hs.gf,hs.ga,as.gf,as.ga].every(x=>x!==null)&&hs.played>0&&as.played>0;
+ const split=[hs.homeGF,hs.homeGA,as.awayGF,as.awayGA].every(x=>x!==null);
+ const eh=canGoals?(split?(hs.homeGF+as.awayGA)/2:(hs.gf+as.ga)/2):null;
+ const ea=canGoals?(split?(as.awayGF+hs.homeGA)/2:(as.gf+hs.ga)/2):null;
+ let risk=0,reasons=[];
+ if(hs.played<5){risk+=20;reasons.push(`เจ้าบ้านมีข้อมูลย้อนหลัง ${hs.played}/5 นัด`);}
+ if(as.played<5){risk+=20;reasons.push(`ทีมเยือนมีข้อมูลย้อนหลัง ${as.played}/5 นัด`);}
+ if(!hasPct){risk+=15;reasons.push("เปอร์เซ็นต์ 1X2 จาก API ไม่ครบ");}
+ else{const s=[ph,pd,pa].sort((a,b)=>b-a),gap=s[0]-s[1];if(gap<=10){risk+=20;reasons.push(`ผลคาดการณ์สองอันดับแรกต่าง ${gap.toFixed(0)} จุดเปอร์เซ็นต์`);}else if(gap<=20){risk+=10;reasons.push(`ผลคาดการณ์ยังสูสี ต่าง ${gap.toFixed(0)} จุดเปอร์เซ็นต์`);}}
+ if(!canGoals){risk+=15;reasons.push("ค่าเฉลี่ยประตูไม่ครบสำหรับแบบจำลองสกอร์");}
+ if(![ah,aa,dh,da,fh,fa].some(x=>x!==null)){risk+=10;reasons.push("ไม่มีคะแนนเปรียบเทียบจาก API");}
+ risk=Math.min(100,risk);const level=risk>=60?"สูง":risk>=30?"ปานกลาง":"ต่ำ",riskClass=risk>=60?"risk-high":risk>=30?"risk-medium":"risk-low";
+ let html=`<h4>📊 ข้อมูลคาดการณ์จาก API-Football</h4>`;
+ if(hasPct)html+=`<div class="percentages">${[[ph,"เจ้าบ้าน"],[pd,"เสมอ"],[pa,"ทีมเยือน"]].map(x=>`<div class="percent"><strong>${x[0]}%</strong><span>${x[1]}</span></div>`).join("")}</div>`;
+ else html+=`<div>ไม่มีเปอร์เซ็นต์ 1X2 ครบจาก API</div>`;
+ if(pred?.winner?.name)html+=`<div>🏆 ทีมที่มีแนวโน้มชนะ: <b>${safe(pred.winner.name)}</b></div>`;
+ if(pred?.under_over)html+=`<div>⚽ แนวโน้มประตู: ${safe(pred.under_over)}</div>`;
+ if(pred?.advice)html+=`<div>💡 คำแนะนำจาก API: ${safe(pred.advice)}</div>`;
+ html+=`<div class="title">📈 ฟอร์มย้อนหลัง PRO 5</div><div class="grid">
+ <div class="card"><strong>${safe(home.name||"เจ้าบ้าน")}</strong><div>ข้อมูล ${hs.played}/5 นัด</div><div>ฟอร์ม: ${safe(formText(hs.form))}</div><div>ยิงเฉลี่ย: ${hs.gf??"ไม่มีข้อมูล"} · เสียเฉลี่ย: ${hs.ga??"ไม่มีข้อมูล"}</div></div>
+ <div class="card"><strong>${safe(away.name||"ทีมเยือน")}</strong><div>ข้อมูล ${as.played}/5 นัด</div><div>ฟอร์ม: ${safe(formText(as.form))}</div><div>ยิงเฉลี่ย: ${as.gf??"ไม่มีข้อมูล"} · เสียเฉลี่ย: ${as.ga??"ไม่มีข้อมูล"}</div></div></div>`;
+ html+=`<div class="title">⚔️ เปรียบเทียบเกมรุก เกมรับ และฟอร์ม</div><div class="grid">`;
+ for(const [label,x,y] of [["ฟอร์ม",fh,fa],["เกมรุก",ah,aa],["เกมรับ",dh,da]])html+=`<div class="card"><strong>${label}</strong><div>เจ้าบ้าน: ${x??"-"}% <div class="bar"><div class="fill" style="width:${Math.max(0,Math.min(100,x??0))}%"></div></div></div><div>ทีมเยือน: ${y??"-"}% <div class="bar"><div class="fill" style="width:${Math.max(0,Math.min(100,y??0))}%"></div></div></div></div>`;
+ html+=`</div><div class="title">🏟️ สถิติแยกเหย้า–เยือน</div><div class="grid"><div class="card"><strong>เจ้าบ้านในบ้าน</strong><div>ยิง ${hs.homeGF??"ไม่มีข้อมูล"} · เสีย ${hs.homeGA??"ไม่มีข้อมูล"}</div><div>แข่ง ${hs.homePlayed??"ไม่มีข้อมูล"} นัด</div></div><div class="card"><strong>ทีมเยือนนอกบ้าน</strong><div>ยิง ${as.awayGF??"ไม่มีข้อมูล"} · เสีย ${as.awayGA??"ไม่มีข้อมูล"}</div><div>แข่ง ${as.awayPlayed??"ไม่มีข้อมูล"} นัด</div></div></div>`;
+ html+=`<div class="title">🎯 สกอร์และโอกาสทำประตูจากแบบจำลองอย่างง่าย</div>`;
+ if(canGoals){const goals=goalModel(eh,ea);html+=`<div class="card"><div class="score-pick">${scoreModel(eh,ea)}</div><div style="text-align:center">สกอร์ที่มีโอกาสสูงสุดในแบบจำลอง</div><div class="note">ค่าเฉลี่ยประตูคาดหมาย: ${eh.toFixed(2)} - ${ea.toFixed(2)} · ${split?"ใช้สถิติแยกเหย้า–เยือน":"ใช้ค่าเฉลี่ยรวมเพราะไม่มีข้อมูลแยกครบ"}</div><div class="percentages"><div class="percent"><strong>${goals.o15.toFixed(1)}%</strong><span>สูงกว่า 1.5</span></div><div class="percent"><strong>${goals.o25.toFixed(1)}%</strong><span>สูงกว่า 2.5</span></div><div class="percent"><strong>${goals.btts.toFixed(1)}%</strong><span>ทั้งสองทีมยิง</span></div></div></div>`;}
+ else html+=`<div class="result">ข้อมูลค่าเฉลี่ยประตูไม่ครบ จึงไม่สร้างสกอร์คาดการณ์</div>`;
+ html+=`<div class="title">🛡️ ระดับความเสี่ยงด้านข้อมูล</div><div class="card ${riskClass}"><strong>ระดับ ${level}</strong><div class="risk-score">${risk}/100</div><div>เป็นดัชนีข้อจำกัดของข้อมูลและความสูสี ไม่ใช่โอกาสแพ้ชนะหรือความเสี่ยงการเดิมพัน</div>${reasons.map(x=>`<div>• ${safe(x)}</div>`).join("")}<div class="note">${risk>=60?"ข้อมูลมีข้อจำกัดหลายด้าน ควรงดสรุปผลแบบมั่นใจ":"ใช้ประกอบการติดตามกีฬาเท่านั้น ไม่รับประกันผล"}</div></div>`;
+ html+=renderOdds(ph,pd,pa);
+ const fixtureId=Number(box.id.replace("prediction-","")),homeId=n(home.id),awayId=n(away.id);
+ html+=`<div class="title">🩺 ความพร้อมทีมและรายชื่อผู้เล่น PRO 6</div><div class="card">ข้อมูลตัวจริงและผู้บาดเจ็บขึ้นกับข้อมูลและสิทธิ์ API-Football
+ <div class="action-grid"><button data-resource="lineups" data-fixture="${fixtureId}">👥 โหลดรายชื่อผู้เล่น</button><button data-resource="injuries" data-fixture="${fixtureId}">🩹 โหลดผู้บาดเจ็บ</button></div>
+ <div class="result" id="lineups-${fixtureId}">ยังไม่ได้เรียกข้อมูลรายชื่อผู้เล่น</div><div class="result" id="injuries-${fixtureId}">ยังไม่ได้เรียกข้อมูลผู้บาดเจ็บ</div></div>`;
+ html+=`<div class="title">📚 สถิติพบกันย้อนหลัง H2H · PRO 7</div><div class="card"><div>รหัสทีม: ${homeId??"-"} · ${awayId??"-"}</div><button data-h2h data-home="${homeId??""}" data-away="${awayId??""}" style="margin-top:9px;background:#145b78;color:white;width:100%">📚 โหลดสถิติพบกันย้อนหลัง 10 นัด</button><div class="result" id="h2h-${fixtureId}">ยังไม่ได้เรียกข้อมูล H2H</div></div>`;
+ const checks=[["ข้อมูลคาดการณ์ API",!!pred],["เปอร์เซ็นต์ 1X2 ครบ",hasPct],["สถิติฟอร์มทั้งสองทีม",hs.played>0&&as.played>0],["ค่าเฉลี่ยประตูทั้งสองทีม",canGoals],["ข้อมูลเหย้า–เยือนครบ",split],["คะแนนเปรียบเทียบจาก API",[ah,aa,dh,da,fh,fa].some(x=>x!==null)]],passed=checks.filter(x=>x[1]).length;
+ html+=`<div class="title">🧪 ตรวจสอบคุณภาพบทวิเคราะห์ PRO 8</div><div class="final-summary"><strong>ความพร้อมของข้อมูล ${passed}/6 หมวด</strong><div class="note">จำนวนหมวดที่พบข้อมูล ไม่ใช่คะแนนความแม่นยำ</div>${checks.map(x=>`<div>${x[1]?"✅":"⚪"} ${x[0]}: ${x[1]?"พบข้อมูล":"ไม่มีข้อมูล/ไม่ครบ"}</div>`).join("")}</div>`;
+ const sample=Math.min(hs.played,5)+Math.min(as.played,5),clarity=sample>=8?"ค่อนข้างดี":sample>=5?"ปานกลาง":"จำกัด";
+ html+=`<div class="title">🧭 ระดับความชัดเจนของข้อมูล</div><div class="card"><strong>${clarity}</strong><div>ข้อมูลย้อนหลัง ${sample}/10 นัดรวมสองทีม</div><div class="note">เป็นตัวบ่งชี้จำนวนตัวอย่าง ไม่ใช่ความแม่นยำที่ผ่านการทดสอบ</div></div>
+ <div class="note source"><b>ข้อมูลจาก API-Football:</b> เปอร์เซ็นต์คาดการณ์ ฟอร์ม คะแนนเปรียบเทียบ ตัวจริง ผู้บาดเจ็บ และ H2H เฉพาะเมื่อ API ส่งข้อมูล</div>
+ <div class="note warn">บทวิเคราะห์สกอร์และดัชนีความเสี่ยงเป็นการประเมินอย่างง่าย ไม่ใช่ข้อมูลหรือคำรับรองจาก API-Football ผลจริงอาจแตกต่าง</div>`;
  box.innerHTML=html;
 }
-async function loadPrediction(id,button,box){
- if(!id||!Number.isSafeInteger(id)||id<=0){box.hidden=false;box.textContent="ไม่พบรหัสการแข่งขัน";return;}
- box.hidden=false;
- if(predictionCache[id]){showPrediction(box,predictionCache[id]);return;}
- button.disabled=true;button.textContent="⏳ กำลังวิเคราะห์...";
- box.textContent="กำลังเรียกข้อมูลคาดการณ์จาก API-Football กรุณารอสักครู่";
- try{
-  const response=await fetch(`${API}/api/fixtures/${id}/predictions`);
-  if(!response.ok)throw new Error("เซิร์ฟเวอร์ตอบกลับ HTTP "+response.status);
-  const data=await response.json();
-  if(data.error)throw new Error(typeof data.error==="string"?data.error:JSON.stringify(data.error));
-  const result=extractResult(data);
-  predictionCache[id]=result;
-  showPrediction(box,result);
- }catch(error){
-  box.innerHTML=`<b>⚠️ โหลดข้อมูลวิเคราะห์ไม่สำเร็จ</b><br>${safe(error.message)}<br><br>ลองกดปุ่มวิเคราะห์อีกครั้งภายหลัง`;
- }finally{button.disabled=false;button.textContent="🤖 วิเคราะห์การแข่งขัน PRO";}
+async function fetchJson(url){const res=await fetch(url);const data=await res.json().catch(()=>({}));if(!res.ok)throw Error(data.error||`Backend HTTP ${res.status}`);if(data.error)throw Error(data.error);return data;}
+async function analyze(id,button,box){
+ box.hidden=false;if(predictionCache[id]){renderAnalysis(box,predictionCache[id]);return;}
+ button.disabled=true;button.textContent="กำลังวิเคราะห์...";
+ box.textContent="กำลังเรียกข้อมูลจาก API-Football...";
+ try{const data=await fetchJson(`${API}/api/fixtures/${id}/predictions`);const result=extract(data);if(!result)throw Error("ไม่พบข้อมูลคาดการณ์");predictionCache[id]=result;renderAnalysis(box,result);}
+ catch(e){box.textContent=`โหลดข้อมูลวิเคราะห์ไม่สำเร็จ: ${e.message}`;}
+ finally{button.disabled=false;button.textContent="🤖 วิเคราะห์การแข่งขัน PRO";}
 }
-function calculateOdds(tool){
- const fields={home:tool.querySelector('[data-odds="home"]'),draw:tool.querySelector('[data-odds="draw"]'),away:tool.querySelector('[data-odds="away"]')};
- const odds={};
- for(const key of Object.keys(fields)){
-  const value=Number(fields[key]?.value);
-  if(!fields[key]?.value||!Number.isFinite(value)||value<=1){tool.querySelector(".odds-result").textContent="กรุณากรอกราคาให้ครบทั้ง 3 ช่อง และแต่ละราคาต้องมากกว่า 1.00";return;}
-  odds[key]=value;
- }
- const implied={home:1/odds.home,draw:1/odds.draw,away:1/odds.away};
- const total=implied.home+implied.draw+implied.away;
- const margin=(total-1)*100;
+function calcOdds(tool){
+ const odds={};for(const k of ["home","draw","away"]){const el=tool.querySelector(`[data-odd="${k}"]`),v=Number(el?.value);if(!el?.value||!Number.isFinite(v)||v<=1){tool.querySelector("[data-odds-result]").textContent="กรุณากรอกราคาให้ครบทั้ง 3 ช่อง และแต่ละราคาต้องมากกว่า 1.00";return;}odds[k]=v;}
+ const raw={home:1/odds.home,draw:1/odds.draw,away:1/odds.away},total=raw.home+raw.draw+raw.away;
  const names={home:"เจ้าบ้าน",draw:"เสมอ",away:"ทีมเยือน"};
- const rows=["home","draw","away"].map(key=>{
-  const market=implied[key]/total*100;
-  const apiRaw=tool.dataset["api"+key[0].toUpperCase()+key.slice(1)];
-  const api=apiRaw===""?null:Number(apiRaw);
-  const gap=api===null?"ไม่มีข้อมูล API":`${(api-market).toFixed(1)>0?"+":""}${(api-market).toFixed(1)} จุด`;
-  const fair=api!==null&&api>0?`ราคาเทียบเท่าจาก API ${ (100/api).toFixed(2) }` : "ราคาเทียบเท่าจาก API -";
-  return `<div class="odds-row"><span>${names[key]}<br><strong>${market.toFixed(1)}%</strong></span><span>API: ${api===null?"-":api+"%"}<br>${gap}</span><span>ราคา: ${odds[key].toFixed(2)}<br>${fair}</span></div>`;
- }).join("");
- tool.querySelector(".odds-result").innerHTML=`<div><b>ความน่าจะเป็นโดยนัยหลังปรับสัดส่วน:</b> ${rows}</div><div style="margin-top:9px"><b>ส่วนต่างรวมของราคา (overround): ${margin.toFixed(2)}%</b></div><div class="prediction-note">ส่วนต่างระหว่าง API กับตลาดเป็นเพียงการเปรียบเทียบตัวเลข ไม่ได้ยืนยันว่าราคามีความคุ้มค่า และความน่าจะเป็นจาก API อาจไม่ได้ผ่านการปรับเทียบ</div>`;
+ const rows=["home","draw","away"].map(k=>{const market=raw[k]/total*100,api=tool.dataset["p"+k[0]]===""?null:Number(tool.dataset["p"+k[0]]),gap=api===null?"ไม่มีข้อมูล API":`${(api-market)>0?"+":""}${(api-market).toFixed(1)} จุดเปอร์เซ็นต์`;return `<div class="grid"><div class="card"><strong>${names[k]}</strong><div>${market.toFixed(1)}%</div><div>API: ${api===null?"-":api+"%"}</div><div>${gap}</div><div>ราคา ${odds[k].toFixed(2)}</div><div>ราคาเทียบ API: ${api>0?(100/api).toFixed(2):"-"}</div></div></div>`;}).join("");
+ tool.querySelector("[data-odds-result]").innerHTML=`<b>ความน่าจะเป็นโดยนัยหลังปรับสัดส่วน</b>${rows}<b>Overround: ${((total-1)*100).toFixed(2)}%</b>`;
 }
-async function loadExtraResource(id,resource,button,target){
- if(!id||!Number.isSafeInteger(id)||id<=0){target.textContent="ไม่พบรหัสการแข่งขัน";return;}
- button.disabled=true;button.textContent="กำลังโหลด...";target.textContent="กำลังเรียกข้อมูลจาก Backend";
- try{
-  const response=await fetch(`${API}/api/fixtures/${id}/${resource}`);
-  const data=await response.json();
-  if(!response.ok)throw new Error(data?.error||`Backend ตอบกลับ HTTP ${response.status}`);
-  if(data?.error)throw new Error(typeof data.error==="string"?data.error:JSON.stringify(data.error));
-  const list=Array.isArray(data?.response)?data.response:Array.isArray(data?.data?.response)?data.data.response:Array.isArray(data?.data)?data.data:Array.isArray(data)?data:[];
-  if(!list.length){target.textContent="API ยังไม่มีข้อมูลสำหรับรายการนี้ หรือ endpoint/แพ็กเกจยังไม่รองรับ";return;}
-  if(resource==="lineups"){
-   target.innerHTML="<h5>รายชื่อผู้เล่น</h5>"+list.map(team=>{
-    const teamName=safe(team.team?.name||"ทีม");
-    const starters=Array.isArray(team.startXI)?team.startXI:[];
-    const subs=Array.isArray(team.substitutes)?team.substitutes:[];
-    const renderPlayer=x=>{const p=x.player||x;return `<div>• ${safe(p.number??"")} ${safe(p.name||"ไม่ทราบชื่อ")} ${p.pos?`(${safe(p.pos)})`:""}</div>`;};
-    return `<b>${teamName}</b><div>แผนการเล่น: ${safe(team.formation||"ไม่มีข้อมูล")}</div><div><b>ตัวจริง (${starters.length})</b>${starters.length?starters.map(renderPlayer).join(""):"ไม่มีรายชื่อ"}</div><div><b>ตัวสำรอง (${subs.length})</b>${subs.length?subs.map(renderPlayer).join(""):"ไม่มีรายชื่อ"}</div>`;
-   }).join("<hr>");
-  }else{
-   target.innerHTML="<h5>ผู้เล่นบาดเจ็บ/ติดโทษแบน</h5>"+list.map(item=>`<div>• <b>${safe(item.player?.name||"ไม่ทราบชื่อ")}</b> · ${safe(item.team?.name||"ทีมไม่ระบุ")}<br>${safe(item.player?.type||item.type||"สถานะไม่ระบุ")} ${safe(item.player?.reason||item.reason||"")}</div>`).join("");
-  }
- }catch(error){target.textContent=`โหลดข้อมูลไม่สำเร็จ: ${error.message} · อาจต้องเปิด endpoint นี้ใน Backend ก่อน`;
- }finally{button.disabled=false;button.textContent=resource==="lineups"?"👥 โหลดรายชื่อผู้เล่น":"🩹 โหลดข้อมูลผู้บาดเจ็บ";}
+async function loadResource(id,resource,button,target){
+ button.disabled=true;button.textContent="กำลังโหลด...";
+ try{const data=await fetchJson(`${API}/api/fixtures/${id}/${resource}`),list=arr(data);
+ if(!list.length){target.textContent="API ยังไม่มีข้อมูลสำหรับรายการนี้ หรือแพ็กเกจไม่รองรับ";return;}
+ if(resource==="lineups"){target.innerHTML="<h5>รายชื่อผู้เล่น</h5>"+list.map(team=>{const starters=Array.isArray(team.startXI)?team.startXI:[],subs=Array.isArray(team.substitutes)?team.substitutes:[],player=x=>{const p=x.player||x;return `<div>• ${safe(p.number??"")} ${safe(p.name||"ไม่ทราบชื่อ")} ${p.pos?`(${safe(p.pos)})`:""}</div>`;};return `<b>${safe(team.team?.name||"ทีม")}</b><div>แผน: ${safe(team.formation||"-")}</div><b>ตัวจริง (${starters.length})</b>${starters.length?starters.map(player).join(""):"ไม่มีรายชื่อ"}<b>ตัวสำรอง (${subs.length})</b>${subs.length?subs.map(player).join(""):"ไม่มีรายชื่อ"}`;}).join("<hr>");}
+ else target.innerHTML="<h5>ผู้เล่นบาดเจ็บ/ติดโทษแบน</h5>"+list.map(x=>`<div>• <b>${safe(x.player?.name||"ไม่ทราบชื่อ")}</b> · ${safe(x.team?.name||"ทีมไม่ระบุ")}<br>${safe(x.player?.type||x.type||"สถานะไม่ระบุ")} ${safe(x.player?.reason||x.reason||"")}</div>`).join("");
+ }catch(e){target.textContent=`โหลดข้อมูลไม่สำเร็จ: ${e.message}`;}
+ finally{button.disabled=false;button.textContent=resource==="lineups"?"👥 โหลดรายชื่อผู้เล่น":"🩹 โหลดผู้บาดเจ็บ";}
 }
-matchesBox.addEventListener("click",event=>{
- const extra=event.target.closest("[data-extra]");
- if(extra){const id=Number(extra.dataset.fixture),resource=extra.dataset.extra,target=document.getElementById(`extra-${resource}-${id}`);if(target)loadExtraResource(id,resource,extra,target);return;}
- const calc=event.target.closest("[data-calc-odds]");
- if(calc){const tool=calc.closest(".odds-tool");if(tool)calculateOdds(tool);return;}
- const button=event.target.closest(".predict-btn");if(!button)return;
- const id=Number(button.dataset.fixtureId),box=document.getElementById("prediction-"+id);
- if(box)loadPrediction(id,button,box);
+async function loadH2H(home,away,button,target){
+ if(!home||!away){target.textContent="ไม่มีรหัสทีมสำหรับค้นหา H2H";return;}
+ button.disabled=true;button.textContent="กำลังโหลด H2H...";
+ try{const data=await fetchJson(`${API}/api/h2h?home=${encodeURIComponent(home)}&away=${encodeURIComponent(away)}&last=10`),list=arr(data);
+ if(!list.length){target.textContent="API ไม่มีข้อมูลการพบกันย้อนหลังของสองทีมนี้";return;}
+ target.innerHTML="<h5>ผลพบกันย้อนหลัง</h5>"+list.map(x=>{const f=x.fixture||{},t=x.teams||{},g=x.goals||{};return `<div>• ${safe(f.date?new Date(f.date).toLocaleDateString("th-TH"):"ไม่ทราบวันที่")} · ${safe(t.home?.name||"ทีม")} ${safe(g.home??"-")} - ${safe(g.away??"-")} ${safe(t.away?.name||"ทีม")} · ${safe(f.status?.short||"")}</div>`;}).join("");
+ }catch(e){target.textContent=`โหลด H2H ไม่สำเร็จ: ${e.message}`;}
+ finally{button.disabled=false;button.textContent="📚 โหลดสถิติพบกันย้อนหลัง 10 นัด";}
+}
+matchesBox.addEventListener("click",e=>{
+ const predict=e.target.closest("[data-predict]");if(predict){const id=Number(predict.dataset.predict),box=document.getElementById(`prediction-${id}`);if(box)analyze(id,predict,box);return;}
+ const resource=e.target.closest("[data-resource]");if(resource){const id=Number(resource.dataset.fixture),name=resource.dataset.resource,target=document.getElementById(`${name}-${id}`);if(target)loadResource(id,name,resource,target);return;}
+ const h2h=e.target.closest("[data-h2h]");if(h2h){const box=h2h.closest(".card"),target=box.querySelector(".result");loadH2H(h2h.dataset.home,h2h.dataset.away,h2h,target);return;}
+ const odds=e.target.closest("[data-odds-calc]");if(odds)calcOdds(odds.closest(".odds"));
 });
 async function loadMatches(){
  const date=dateInput.value;if(!date){statusBox.textContent="กรุณาเลือกวันที่";return;}
  statusBox.textContent="กำลังโหลดข้อมูลการแข่งขัน...";matchesBox.innerHTML="";
- try{
-  const response=await fetch(`${API}/api/fixtures?date=${encodeURIComponent(date)}`);
-  if(!response.ok)throw new Error("เซิร์ฟเวอร์ตอบกลับ HTTP "+response.status);
-  const data=await response.json();if(data.error)throw new Error(typeof data.error==="string"?data.error:JSON.stringify(data.error));
-  const list=getMatches(data);if(!list)throw new Error("รูปแบบข้อมูลจาก Backend ไม่ตรงกับที่คาดไว้");
-  statusBox.textContent=`พบการแข่งขัน ${list.length} รายการ · วันที่ ${date}`;
-  if(!list.length){matchesBox.innerHTML='<div class="empty">ไม่มีโปรแกรมการแข่งขันในวันที่เลือก</div>';return;}
-  matchesBox.innerHTML=list.map(renderMatch).join("");
- }catch(error){
-  statusBox.textContent="ไม่สามารถโหลดข้อมูลได้";
-  matchesBox.innerHTML=`<div class="panel"><div class="empty">⚠️ โหลดข้อมูลไม่สำเร็จ<br><br>${safe(error.message)}<br><br>ลองกดค้นหาอีกครั้ง หรือตรวจสอบ Backend</div></div>`;
- }
+ try{const data=await fetchJson(`${API}/api/fixtures?date=${encodeURIComponent(date)}`),list=arr(data);statusBox.textContent=`พบการแข่งขัน ${list.length} รายการ · วันที่ ${date}`;
+ if(!list.length){matchesBox.innerHTML='<div class="empty">ไม่มีโปรแกรมการแข่งขันในวันที่เลือก</div>';return;}
+ matchesBox.innerHTML=list.map(renderMatch).join("");
+ }catch(e){statusBox.textContent="ไม่สามารถโหลดข้อมูลได้";matchesBox.innerHTML=`<div class="panel empty">⚠️ โหลดข้อมูลไม่สำเร็จ<br>${safe(e.message)}<br>ลองกดค้นหาอีกครั้ง</div>`;}
 }
+document.getElementById("searchBtn").addEventListener("click",loadMatches);
 loadMatches();
 </script>
 </body>
