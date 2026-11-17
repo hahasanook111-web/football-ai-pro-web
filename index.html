@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#071426">
-<title>FOOTBALL AI PRO PRO UPGRADE</title>
+<title>FOOTBALL AI PRO PRO 2</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#071426;color:#fff;font-family:Arial,sans-serif}
@@ -55,7 +55,7 @@ footer{text-align:center;color:#7894aa;font-size:12px;padding:20px}
 <body>
 <header>
 <h1>⚽ FOOTBALL AI PRO</h1>
-<p>ระบบติดตามและวิเคราะห์ฟุตบอล · PRO UPGRADE</p>
+<p>ระบบติดตามและวิเคราะห์ฟุตบอล · PRO 2</p>
 </header>
 <main>
 <div class="panel">
@@ -122,10 +122,15 @@ function extractResult(data){
 }
 function num(v){if(v===null||v===undefined||v==="")return null;const n=Number(String(v).replace("%","").trim());return Number.isFinite(n)?n:null;}
 function pct(v){const n=num(v);return n===null?"-":`${n}%`;}
-function avg(stat){const v=num(stat?.average);return v;}
+function avg(stat){
+ if(stat===null||stat===undefined)return null;
+ if(typeof stat==="number"||typeof stat==="string")return num(stat);
+ return num(stat.average);
+}
 function getTeamStats(team){
  const last=team?.last_5||{};
- const goals=team?.league?.goals||team?.goals||{};
+ // ใช้ค่าเฉลี่ยจาก 5 นัดล่าสุดก่อน หากไม่มีจึงใช้ค่าเฉลี่ยในลีกที่ API ส่งมา
+ const goals=last.goals||team?.league?.goals||team?.goals||{};
  const gf=goals.for||{},ga=goals.against||{};
  return {played:num(last.played)??0,form:last.form||"",gf:avg(gf),ga:avg(ga),raw:last};
 }
@@ -137,10 +142,13 @@ function estimateScore(h,a){
  return {home:bestH,away:bestA,homeLambda:hg,awayLambda:ag};
 }
 function formLabel(form){
- if(!form)return "ไม่มีข้อมูลฟอร์ม";
- const chars=String(form).toUpperCase().replace(/[^WDL]/g,"").slice(-5);
- if(!chars)return "ไม่มีข้อมูลฟอร์ม";
- return chars.split("").map(c=>c==="W"?"ชนะ":c==="D"?"เสมอ":"แพ้").join(" · ");
+ if(form===null||form===undefined||String(form).trim()==="")return "ไม่มีข้อมูลฟอร์ม";
+ const raw=String(form).trim();
+ const chars=raw.toUpperCase().replace(/[^WDL]/g,"").slice(-5);
+ if(chars)return chars.split("").map(c=>c==="W"?"ชนะ":c==="D"?"เสมอ":"แพ้").join(" · ");
+ const value=num(raw);
+ if(value!==null&&raw.includes("%"))return `อัตราฟอร์มตามข้อมูล API ${value}%`;
+ return `ข้อมูลฟอร์มจาก API: ${raw}`;
 }
 function showPrediction(box,result){
  const pred=result?.predictions||result?.prediction||null;
@@ -167,8 +175,8 @@ function showPrediction(box,result){
  }
  html+=`<div class="pro-title">📈 ฟอร์มย้อนหลังของทั้งสองทีม</div>
  <div class="pro-grid">
- <div class="pro-card"><strong>เจ้าบ้าน</strong><div>ลงแข่งในชุดข้อมูล: ${hs.played} นัด</div><div>ฟอร์ม: ${safe(formLabel(hs.form))}</div><div>รหัสฟอร์ม: ${safe(hs.form||"ไม่มีข้อมูล")}</div></div>
- <div class="pro-card"><strong>ทีมเยือน</strong><div>ลงแข่งในชุดข้อมูล: ${as.played} นัด</div><div>ฟอร์ม: ${safe(formLabel(as.form))}</div><div>รหัสฟอร์ม: ${safe(as.form||"ไม่มีข้อมูล")}</div></div></div>`;
+ <div class="pro-card"><strong>เจ้าบ้าน</strong><div>ลงแข่งในชุดข้อมูล: ${hs.played} นัด</div><div>ฟอร์ม: ${safe(formLabel(hs.form))}</div><div>ข้อมูลดิบจาก API: ${safe(hs.form||"ไม่มีข้อมูล")}</div>${hs.gf!==null?`<div>ยิงได้เฉลี่ย: ${hs.gf} ประตู/นัด</div>`:""}${hs.ga!==null?`<div>เสียเฉลี่ย: ${hs.ga} ประตู/นัด</div>`:""}</div>
+ <div class="pro-card"><strong>ทีมเยือน</strong><div>ลงแข่งในชุดข้อมูล: ${as.played} นัด</div><div>ฟอร์ม: ${safe(formLabel(as.form))}</div><div>ข้อมูลดิบจาก API: ${safe(as.form||"ไม่มีข้อมูล")}</div>${as.gf!==null?`<div>ยิงได้เฉลี่ย: ${as.gf} ประตู/นัด</div>`:""}${as.ga!==null?`<div>เสียเฉลี่ย: ${as.ga} ประตู/นัด</div>`:""}</div></div>`;
  if(hs.played<5||as.played<5)html+=`<div class="prediction-note warn">⚠️ ข้อมูลย้อนหลังมีไม่ครบ 5 นัดอย่างน้อยหนึ่งทีม ระบบแสดงจำนวนเกมจริงที่ API ส่งมา ไม่เติมข้อมูลที่ขาด</div>`;
  const cAttack=num(comparison.att);
  const attackHome=num(comparison.att?.home),attackAway=num(comparison.att?.away);
@@ -183,15 +191,24 @@ function showPrediction(box,result){
  }else{
   html+=`<div class="pro-card">ยังไม่มีคะแนนเปรียบเทียบจาก API สำหรับคู่นี้</div>`;
  }
+ const comparisonRows=[["ฟอร์ม",formHome,formAway],["เกมรุก",attackHome,attackAway],["เกมรับ",defenseHome,defenseAway]];
+ const homeEdges=comparisonRows.filter(r=>r[1]!==null&&r[2]!==null&&r[1]>r[2]).map(r=>r[0]);
+ const awayEdges=comparisonRows.filter(r=>r[1]!==null&&r[2]!==null&&r[2]>r[1]).map(r=>r[0]);
+ html+=`<div class="pro-title">🧩 จุดเด่นและด้านที่ควรระวัง</div>`;
+ if(homeEdges.length||awayEdges.length){
+  html+=`<div class="pro-grid"><div class="pro-card"><strong>เจ้าบ้าน</strong><div>${homeEdges.length?`คะแนนเปรียบเทียบสูงกว่าในด้าน: ${safe(homeEdges.join(", "))}`:"ยังไม่พบด้านที่มีคะแนนเปรียบเทียบสูงกว่า"}</div></div><div class="pro-card"><strong>ทีมเยือน</strong><div>${awayEdges.length?`คะแนนเปรียบเทียบสูงกว่าในด้าน: ${safe(awayEdges.join(", "))}`:"ยังไม่พบด้านที่มีคะแนนเปรียบเทียบสูงกว่า"}</div></div></div><div class="prediction-note">การสรุปนี้อ้างอิงเฉพาะคะแนนเปรียบเทียบจาก API ไม่ใช่การวัดคุณภาพทีมโดยตรง</div>`;
+ }else{
+  html+=`<div class="pro-card">คะแนนเปรียบเทียบยังไม่เพียงพอสำหรับระบุจุดเด่นของแต่ละทีม</div>`;
+ }
  html+=`<div class="pro-title">🎯 สกอร์คาดการณ์เพิ่มเติมโดยระบบ</div>`;
- const canEstimate=hs.gf!==null&&hs.ga!==null&&as.gf!==null&&as.ga!==null&&(hs.played>0||as.played>0);
+ const canEstimate=hs.gf!==null&&hs.ga!==null&&as.gf!==null&&as.ga!==null&&hs.played>0&&as.played>0;
  if(canEstimate){
-  const hAttack=hs.gf??1.2,aAttack=as.gf??1.0,hDef=hs.ga??1.2,aDef=as.ga??1.2;
+  const hAttack=hs.gf,aAttack=as.gf,hDef=hs.ga,aDef=as.ga;
   const hExpected=(hAttack+aDef)/2, aExpected=(aAttack+hDef)/2;
   const est=estimateScore(hExpected,aExpected);
   html+=`<div class="pro-card"><div class="score-pick">${est.home} - ${est.away}</div><div style="text-align:center">สกอร์ที่มีความน่าจะเป็นสูงสุดจากแบบจำลองประตูอย่างง่าย</div><div class="prediction-note">ค่าเฉลี่ยประตูคาดหมาย: เจ้าบ้าน ${est.homeLambda.toFixed(2)} · ทีมเยือน ${est.awayLambda.toFixed(2)}</div></div>`;
  }else{
-  html+=`<div class="pro-card">ข้อมูลค่าเฉลี่ยประตูยิงได้/เสียยังไม่เพียงพอ จึงยังไม่แสดงสกอร์คาดการณ์</div>`;
+  html+=`<div class="pro-card">ข้อมูลค่าเฉลี่ยประตูยิงได้/เสียของทั้งสองทีมยังไม่ครบ จึงไม่สร้างตัวเลขแทนข้อมูลจริง กรุณาตรวจสอบคู่ที่มีสถิติย้อนหลังเพียงพอ</div>`;
  }
  html+=`<div class="pro-title">🧭 ระดับความชัดเจนของข้อมูล</div>`;
  const sample=Math.min(hs.played,5)+Math.min(as.played,5);
@@ -199,7 +216,7 @@ function showPrediction(box,result){
  if(!hasPercent&&sample<5)clarity="จำกัด";
  html+=`<div class="pro-card"><strong>${clarity}</strong><div>ข้อมูลเกมย้อนหลังที่มี: ${sample}/10 นัดรวมสองทีม</div><div class="prediction-note">ระดับนี้เป็นตัวบ่งชี้ความครบถ้วนของข้อมูลและจำนวนตัวอย่าง ไม่ใช่เปอร์เซ็นต์ความแม่นยำที่ผ่านการทดสอบ</div></div>`;
  html+=`<div class="prediction-note data-source"><b>ข้อมูลจาก API-Football:</b> เปอร์เซ็นต์คาดการณ์, ทีมที่มีแนวโน้มชนะ, คำแนะนำ, ฟอร์มย้อนหลัง และคะแนนเปรียบเทียบ (แสดงเฉพาะเมื่อ API ส่งข้อมูลมา)</div>
- <div class="prediction-note system-source"><b>บทวิเคราะห์เพิ่มเติมของระบบ:</b> การแปลงฟอร์มเป็นข้อความ, การคำนวณสกอร์คาดการณ์ และระดับความชัดเจนของข้อมูล เป็นการประเมินอย่างง่าย ไม่ใช่ข้อมูลหรือคำรับรองจาก API-Football</div>
+ <div class="prediction-note system-source"><b>บทวิเคราะห์เพิ่มเติมของระบบ:</b> การแสดงฟอร์มเปอร์เซ็นต์, การเปรียบเทียบจุดเด่น, การคำนวณสกอร์จากค่าเฉลี่ยประตูจริง และระดับความชัดเจนของข้อมูล เป็นการประเมินอย่างง่าย ไม่ใช่ข้อมูลหรือคำรับรองจาก API-Football</div>
  <div class="prediction-note">หมายเหตุ: สถิติอาจมีจำนวนเกมไม่ครบ 5 นัด และผลฟุตบอลจริงอาจแตกต่างจากการคาดการณ์</div>`;
  box.innerHTML=html;
 }
