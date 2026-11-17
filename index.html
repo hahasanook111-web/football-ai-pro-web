@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#071426">
-<title>FOOTBALL AI PRO PRO 2</title>
+<title>FOOTBALL AI PRO PRO 3</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#071426;color:#fff;font-family:Arial,sans-serif}
@@ -45,7 +45,7 @@ button:disabled{opacity:.6;cursor:wait}
 .tag{display:inline-block;border:1px solid #35536c;border-radius:20px;padding:2px 8px;font-size:11px;color:#b8d5e6;margin:2px}
 .warn{color:#ffd28a}
 .score-pick{font-size:25px;font-weight:bold;color:#55f2bd;text-align:center;padding:8px}
-.data-source{border-left:3px solid #10b981;padding-left:10px;margin:9px 0}
+.risk-low{border-left:4px solid #10b981}.risk-medium{border-left:4px solid #f59e0b}.risk-high{border-left:4px solid #ef4444}.risk-score{font-size:25px;font-weight:bold;margin:5px 0}.risk-factor{margin:5px 0;color:#d6e9f5}.data-source{border-left:3px solid #10b981;padding-left:10px;margin:9px 0}
 .system-source{border-left:3px solid #60a5fa;padding-left:10px;margin:9px 0}
 .empty{text-align:center;color:#b7ccdc;padding:28px 10px}
 footer{text-align:center;color:#7894aa;font-size:12px;padding:20px}
@@ -55,7 +55,7 @@ footer{text-align:center;color:#7894aa;font-size:12px;padding:20px}
 <body>
 <header>
 <h1>⚽ FOOTBALL AI PRO</h1>
-<p>ระบบติดตามและวิเคราะห์ฟุตบอล · PRO 2</p>
+<p>ระบบติดตามและวิเคราะห์ฟุตบอล · PRO 3</p>
 </header>
 <main>
 <div class="panel">
@@ -72,7 +72,7 @@ footer{text-align:center;color:#7894aa;font-size:12px;padding:20px}
 </div>
 <div id="matches"></div>
 </main>
-<footer>FOOTBALL AI PRO · บทวิเคราะห์เพื่อประกอบการติดตามกีฬา ไม่รับประกันผลการแข่งขัน</footer>
+<footer>FOOTBALL AI PRO PRO 3 · บทวิเคราะห์เพื่อประกอบการติดตามกีฬา ไม่รับประกันผลการแข่งขัน</footer>
 <script>
 const API="https://football-ai-pro-backend.onrender.com";
 const dateInput=document.getElementById("matchDate");
@@ -150,6 +150,25 @@ function formLabel(form){
  if(value!==null&&raw.includes("%"))return `อัตราฟอร์มตามข้อมูล API ${value}%`;
  return `ข้อมูลฟอร์มจาก API: ${raw}`;
 }
+function riskAssessment({hs,as,hasPercent,pHome,pDraw,pAway,attackHome,attackAway,defenseHome,defenseAway,formHome,formAway,canEstimate}){
+ let score=0;const factors=[];
+ if(hs.played<5){score+=20;factors.push(`เจ้าบ้านมีข้อมูลย้อนหลังเพียง ${hs.played} จาก 5 นัด`);}
+ if(as.played<5){score+=20;factors.push(`ทีมเยือนมีข้อมูลย้อนหลังเพียง ${as.played} จาก 5 นัด`);}
+ if(!hasPercent||pHome===null||pDraw===null||pAway===null){score+=15;factors.push("เปอร์เซ็นต์คาดการณ์จาก API ไม่ครบทั้งสามผล");}
+ else{
+  const sorted=[pHome,pDraw,pAway].slice().sort((a,b)=>b-a);const gap=sorted[0]-sorted[1];
+  if(gap<=10){score+=20;factors.push(`ผลคาดการณ์สองอันดับแรกใกล้กัน (ต่าง ${gap.toFixed(0)} จุดเปอร์เซ็นต์)`);}
+  else if(gap<=20){score+=10;factors.push(`ผลคาดการณ์ยังมีความสูสี (ต่าง ${gap.toFixed(0)} จุดเปอร์เซ็นต์)`);}
+ }
+ if(!canEstimate){score+=15;factors.push("ค่าเฉลี่ยประตูยิงได้/เสียไม่ครบสำหรับคำนวณสกอร์");}
+ const hasComparison=[attackHome,attackAway,defenseHome,defenseAway,formHome,formAway].some(v=>v!==null);
+ if(!hasComparison){score+=10;factors.push("ไม่มีคะแนนเปรียบเทียบฟอร์ม เกมรุก หรือเกมรับ");}
+ score=Math.min(100,score);
+ const level=score>=60?"สูง":score>=30?"ปานกลาง":"ต่ำ";
+ const css=score>=60?"risk-high":score>=30?"risk-medium":"risk-low";
+ const advice=score>=60?"ข้อมูลยังมีข้อจำกัดหลายด้าน ควรงดสรุปผลแบบมั่นใจ":score>=30?"ควรใช้ข้อมูลประกอบหลายด้าน และระวังการสรุปจากสถิติที่ยังไม่ครบ":"ข้อมูลที่มีค่อนข้างครบตามเกณฑ์เบื้องต้น แต่ยังไม่รับประกันผลการแข่งขัน";
+ return {score,level,css,advice,factors};
+}
 function showPrediction(box,result){
  const pred=result?.predictions||result?.prediction||null;
  const teams=result?.teams||{};
@@ -168,6 +187,105 @@ function showPrediction(box,result){
    <div class="percent"><strong>${safe(pct(percent.away))}</strong><span>ทีมเยือนชนะ</span></div></div>`;
   if(pred.winner?.name)html+=`<div>🏆 ทีมที่มีแนวโน้มชนะ: <b>${safe(pred.winner.name)}</b></div>`;
   if(pred.under_over)html+=`<div>⚽ แนวโน้มประตูสูง/ต่ำ: <b>${safe(pred.under_over)}</b></div>`;
+  if(pred.advice)html+=`<div>💡 คำแนะนำจาก API: ${safe(pred.advice)}</div>`;
+  if(!hasPercent&&!pred.winner?.name&&!pred.under_over&&!pred.advice)html+=`<div>ผู้ให้บริการยังไม่มีรายละเอียดการคาดการณ์สำหรับคู่นี้</div>`;
+ }else{
+  html+=`<h4>📊 ข้อมูลคาดการณ์จาก API-Football</h4><div>ไม่พบข้อมูลคาดการณ์สำหรับคู่นี้ แต่ระบบจะแสดงบทวิเคราะห์เพิ่มเติมเท่าที่ข้อมูลรองรับ</div>`;
+ }
+ html+=`<div class="pro-title">📈 ฟอร์มย้อนหลังของทั้งสองทีม</div>
+ <div class="pro-grid">
+ <div class="pro-card"><strong>เจ้าบ้าน</strong><div>ลงแข่งในชุดข้อมูล: ${hs.played} นัด</div><div>ฟอร์ม: ${safe(formLabel(hs.form))}</div><div>ข้อมูลดิบจาก API: ${safe(hs.form||"ไม่มีข้อมูล")}</div>${hs.gf!==null?`<div>ยิงได้เฉลี่ย: ${hs.gf} ประตู/นัด</div>`:""}${hs.ga!==null?`<div>เสียเฉลี่ย: ${hs.ga} ประตู/นัด</div>`:""}</div>
+ <div class="pro-card"><strong>ทีมเยือน</strong><div>ลงแข่งในชุดข้อมูล: ${as.played} นัด</div><div>ฟอร์ม: ${safe(formLabel(as.form))}</div><div>ข้อมูลดิบจาก API: ${safe(as.form||"ไม่มีข้อมูล")}</div>${as.gf!==null?`<div>ยิงได้เฉลี่ย: ${as.gf} ประตู/นัด</div>`:""}${as.ga!==null?`<div>เสียเฉลี่ย: ${as.ga} ประตู/นัด</div>`:""}</div></div>`;
+ if(hs.played<5||as.played<5)html+=`<div class="prediction-note warn">⚠️ ข้อมูลย้อนหลังมีไม่ครบ 5 นัดอย่างน้อยหนึ่งทีม ระบบแสดงจำนวนเกมจริงที่ API ส่งมา ไม่เติมข้อมูลที่ขาด</div>`;
+ const cAttack=num(comparison.att);
+ const attackHome=num(comparison.att?.home),attackAway=num(comparison.att?.away);
+ const defenseHome=num(comparison.def?.home),defenseAway=num(comparison.def?.away);
+ const formHome=num(comparison.form?.home),formAway=num(comparison.form?.away);
+ html+=`<div class="pro-title">⚔️ เปรียบเทียบเกมรุกและเกมรับ</div>`;
+ if(attackHome!==null||attackAway!==null||defenseHome!==null||defenseAway!==null||formHome!==null||formAway!==null){
+  html+=`<div class="pro-card">`;
+  const rows=[["ฟอร์ม",formHome,formAway],["เกมรุก",attackHome,attackAway],["เกมรับ",defenseHome,defenseAway]];
+  rows.forEach(([label,h,a])=>{if(h!==null||a!==null){html+=`<div style="margin:8px 0"><b>${label}</b><div class="bar-row"><span>เจ้าบ้าน</span><div class="bar-bg"><div class="bar-fill" style="width:${Math.max(0,Math.min(100,h??0))}%"></div></div><span>${h===null?"-":h+"%"}</span></div><div class="bar-row"><span>ทีมเยือน</span><div class="bar-bg"><div class="bar-fill" style="width:${Math.max(0,Math.min(100,a??0))}%"></div></div><span>${a===null?"-":a+"%"}</span></div></div>`;}});
+  html+=`</div>`;
+ }else{
+  html+=`<div class="pro-card">ยังไม่มีคะแนนเปรียบเทียบจาก API สำหรับคู่นี้</div>`;
+ }
+ const comparisonRows=[["ฟอร์ม",formHome,formAway],["เกมรุก",attackHome,attackAway],["เกมรับ",defenseHome,defenseAway]];
+ const homeEdges=comparisonRows.filter(r=>r[1]!==null&&r[2]!==null&&r[1]>r[2]).map(r=>r[0]);
+ const awayEdges=comparisonRows.filter(r=>r[1]!==null&&r[2]!==null&&r[2]>r[1]).map(r=>r[0]);
+ html+=`<div class="pro-title">🧩 จุดเด่นและด้านที่ควรระวัง</div>`;
+ if(homeEdges.length||awayEdges.length){
+  html+=`<div class="pro-grid"><div class="pro-card"><strong>เจ้าบ้าน</strong><div>${homeEdges.length?`คะแนนเปรียบเทียบสูงกว่าในด้าน: ${safe(homeEdges.join(", "))}`:"ยังไม่พบด้านที่มีคะแนนเปรียบเทียบสูงกว่า"}</div></div><div class="pro-card"><strong>ทีมเยือน</strong><div>${awayEdges.length?`คะแนนเปรียบเทียบสูงกว่าในด้าน: ${safe(awayEdges.join(", "))}`:"ยังไม่พบด้านที่มีคะแนนเปรียบเทียบสูงกว่า"}</div></div></div><div class="prediction-note">การสรุปนี้อ้างอิงเฉพาะคะแนนเปรียบเทียบจาก API ไม่ใช่การวัดคุณภาพทีมโดยตรง</div>`;
+ }else{
+  html+=`<div class="pro-card">คะแนนเปรียบเทียบยังไม่เพียงพอสำหรับระบุจุดเด่นของแต่ละทีม</div>`;
+ }
+ html+=`<div class="pro-title">🎯 สกอร์คาดการณ์เพิ่มเติมโดยระบบ</div>`;
+ const canEstimate=hs.gf!==null&&hs.ga!==null&&as.gf!==null&&as.ga!==null&&hs.played>0&&as.played>0;
+ if(canEstimate){
+  const hAttack=hs.gf,aAttack=as.gf,hDef=hs.ga,aDef=as.ga;
+  const hExpected=(hAttack+aDef)/2, aExpected=(aAttack+hDef)/2;
+  const est=estimateScore(hExpected,aExpected);
+  html+=`<div class="pro-card"><div class="score-pick">${est.home} - ${est.away}</div><div style="text-align:center">สกอร์ที่มีความน่าจะเป็นสูงสุดจากแบบจำลองประตูอย่างง่าย</div><div class="prediction-note">ค่าเฉลี่ยประตูคาดหมาย: เจ้าบ้าน ${est.homeLambda.toFixed(2)} · ทีมเยือน ${est.awayLambda.toFixed(2)}</div></div>`;
+ }else{
+  html+=`<div class="pro-card">ข้อมูลค่าเฉลี่ยประตูยิงได้/เสียของทั้งสองทีมยังไม่ครบ จึงไม่สร้างตัวเลขแทนข้อมูลจริง กรุณาตรวจสอบคู่ที่มีสถิติย้อนหลังเพียงพอ</div>`;
+ }
+ html+=`<div class="pro-title">🛡️ ประเมินความเสี่ยงและความไม่แน่นอน PRO 3</div>`;
+ const risk=riskAssessment({hs,as,hasPercent,pHome,pDraw,pAway,attackHome,attackAway,defenseHome,defenseAway,formHome,formAway,canEstimate});
+ html+=`<div class="pro-card ${risk.css}"><strong>ระดับความเสี่ยงด้านข้อมูล: ${risk.level}</strong><div class="risk-score">${risk.score}/100</div><div>คะแนนนี้เป็นดัชนีข้อจำกัดของข้อมูลและความสูสีของผลคาดการณ์ ไม่ใช่โอกาสแพ้ชนะหรือความเสี่ยงการเดิมพัน</div><div class="prediction-note"><b>เหตุผลประกอบ</b></div>${risk.factors.length?risk.factors.map(x=>`<div class="risk-factor">• ${safe(x)}</div>`).join(""):`<div class="risk-factor">• ไม่พบข้อจำกัดหลักตามเกณฑ์ที่ระบบตรวจสอบ</div>`}<div class="prediction-note"><b>แนวทางอ่านผล:</b> ${safe(risk.advice)}</div></div>`;
+ html+=`<div class="pro-title">🧭 ระดับความชัดเจนของข้อมูล</div>`;
+ const sample=Math.min(hs.played,5)+Math.min(as.played,5);
+ let clarity=sample>=8?"ค่อนข้างดี":sample>=5?"ปานกลาง":"จำกัด";
+ if(!hasPercent&&sample<5)clarity="จำกัด";
+ html+=`<div class="pro-card"><strong>${clarity}</strong><div>ข้อมูลเกมย้อนหลังที่มี: ${sample}/10 นัดรวมสองทีม</div><div class="prediction-note">ระดับนี้เป็นตัวบ่งชี้ความครบถ้วนของข้อมูลและจำนวนตัวอย่าง ไม่ใช่เปอร์เซ็นต์ความแม่นยำที่ผ่านการทดสอบ</div></div>`;
+ html+=`<div class="prediction-note data-source"><b>ข้อมูลจาก API-Football:</b> เปอร์เซ็นต์คาดการณ์, ทีมที่มีแนวโน้มชนะ, คำแนะนำ, ฟอร์มย้อนหลัง และคะแนนเปรียบเทียบ (แสดงเฉพาะเมื่อ API ส่งข้อมูลมา)</div>
+ <div class="prediction-note system-source"><b>บทวิเคราะห์เพิ่มเติมของระบบ:</b> การแสดงฟอร์มเปอร์เซ็นต์, การเปรียบเทียบจุดเด่น, การคำนวณสกอร์จากค่าเฉลี่ยประตูจริง, ดัชนีความเสี่ยงด้านข้อมูล และระดับความชัดเจนของข้อมูล เป็นการประเมินอย่างง่าย ไม่ใช่ข้อมูลหรือคำรับรองจาก API-Football</div>
+ <div class="prediction-note">หมายเหตุ: สถิติอาจมีจำนวนเกมไม่ครบ 5 นัด และผลฟุตบอลจริงอาจแตกต่างจากการคาดการณ์</div>`;
+ box.innerHTML=html;
+}
+async function loadPrediction(id,button,box){
+ if(!id||!Number.isSafeInteger(id)||id<=0){box.hidden=false;box.textContent="ไม่พบรหัสการแข่งขัน";return;}
+ box.hidden=false;
+ if(predictionCache[id]){showPrediction(box,predictionCache[id]);return;}
+ button.disabled=true;button.textContent="⏳ กำลังวิเคราะห์...";
+ box.textContent="กำลังเรียกข้อมูลคาดการณ์จาก API-Football กรุณารอสักครู่";
+ try{
+  const response=await fetch(`${API}/api/fixtures/${id}/predictions`);
+  if(!response.ok)throw new Error("เซิร์ฟเวอร์ตอบกลับ HTTP "+response.status);
+  const data=await response.json();
+  if(data.error)throw new Error(typeof data.error==="string"?data.error:JSON.stringify(data.error));
+  const result=extractResult(data);
+  predictionCache[id]=result;
+  showPrediction(box,result);
+ }catch(error){
+  box.innerHTML=`<b>⚠️ โหลดข้อมูลวิเคราะห์ไม่สำเร็จ</b><br>${safe(error.message)}<br><br>ลองกดปุ่มวิเคราะห์อีกครั้งภายหลัง`;
+ }finally{button.disabled=false;button.textContent="🤖 วิเคราะห์การแข่งขัน PRO";}
+}
+matchesBox.addEventListener("click",event=>{
+ const button=event.target.closest(".predict-btn");if(!button)return;
+ const id=Number(button.dataset.fixtureId),box=document.getElementById("prediction-"+id);
+ if(box)loadPrediction(id,button,box);
+});
+async function loadMatches(){
+ const date=dateInput.value;if(!date){statusBox.textContent="กรุณาเลือกวันที่";return;}
+ statusBox.textContent="กำลังโหลดข้อมูลการแข่งขัน...";matchesBox.innerHTML="";
+ try{
+  const response=await fetch(`${API}/api/fixtures?date=${encodeURIComponent(date)}`);
+  if(!response.ok)throw new Error("เซิร์ฟเวอร์ตอบกลับ HTTP "+response.status);
+  const data=await response.json();if(data.error)throw new Error(typeof data.error==="string"?data.error:JSON.stringify(data.error));
+  const list=getMatches(data);if(!list)throw new Error("รูปแบบข้อมูลจาก Backend ไม่ตรงกับที่คาดไว้");
+  statusBox.textContent=`พบการแข่งขัน ${list.length} รายการ · วันที่ ${date}`;
+  if(!list.length){matchesBox.innerHTML='<div class="empty">ไม่มีโปรแกรมการแข่งขันในวันที่เลือก</div>';return;}
+  matchesBox.innerHTML=list.map(renderMatch).join("");
+ }catch(error){
+  statusBox.textContent="ไม่สามารถโหลดข้อมูลได้";
+  matchesBox.innerHTML=`<div class="panel"><div class="empty">⚠️ โหลดข้อมูลไม่สำเร็จ<br><br>${safe(error.message)}<br><br>ลองกดค้นหาอีกครั้ง หรือตรวจสอบ Backend</div></div>`;
+ }
+}
+loadMatches();
+</script>
+</body>
+</html>
+
   if(pred.advice)html+=`<div>💡 คำแนะนำจาก API: ${safe(pred.advice)}</div>`;
   if(!hasPercent&&!pred.winner?.name&&!pred.under_over&&!pred.advice)html+=`<div>ผู้ให้บริการยังไม่มีรายละเอียดการคาดการณ์สำหรับคู่นี้</div>`;
  }else{
